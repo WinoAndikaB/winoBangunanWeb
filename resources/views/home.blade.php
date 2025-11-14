@@ -233,13 +233,17 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-center">
       <h3 class="text-xl font-semibold text-green-600">Wino Bangunan</h3>
       <p class="mt-2">Alamat: Jl. Veteran No.33, Langkae Araya, Kec. Towuti, Kabupaten Luwu Timur, Sulawesi Selatan 92982</p>
+      <button @click="openMap()" class="mt-3 px-4 py-2 rounded-full bg-green-600 text-white">Lihat di Google Maps</button>
       <p class="mt-1">Telepon: (021) 555-6789</p>
       <p class="mt-1">Email: info@winobangunan.com</p>
       <p class="mt-6 text-sm">© 2025 Wino Bangunan. <span x-text="language === 'id' ? 'Hak Cipta Dilindungi.' : 'All Rights Reserved.'"></span></p>
     </div>
   </footer>
 
-
+    <script>
+        window.productsFromDB = @json($products);
+    </script>
+    
   <!-- Alpine App -->
   <script>
     function winoApp(){
@@ -263,32 +267,53 @@
         ],
         catalog: [],
 
-        init(){
-          // sample catalog
-          this.catalog = Array.from({ length: 30 }, (_, i) => {
-            const categoryObj = this.allCategories[i % this.allCategories.length];
-            const categoryName = this.t(categoryObj.idLabel, categoryObj.enLabel);
-            return {
-              name: `${this.t('Produk', 'Product')} ${i + 1} ${categoryName}`,
-              category: categoryName,
-              price: `Rp ${Math.floor(Math.random() * 100000 + 10000).toLocaleString('id-ID')}`,
-              stock: Math.floor(Math.random() * 500) + 50,
-              image: categoryObj.id === 'material'
-                ? `https://source.unsplash.com/400x400/?cement,building,${i}`
-                : categoryObj.id === 'perkakas'
-                ? `https://source.unsplash.com/400x400/?handtools,hammer,${i}`
-                : categoryObj.id === 'listrik'
-                ? `https://source.unsplash.com/400x400/?electrical,wires,${i}`
-                : `https://source.unsplash.com/400x400/?paint,construction,${i}`
-            };
-          });
+        init() {
+            // KONVERSI DATA DATABASE KE CATALOG
+            this.catalog = window.productsFromDB.map(p => {
+                // Cocokkan nama kategori database dengan kategori Alpine
+                let categoryName = '';
+                switch (p.category.toLowerCase()) {
+                    case 'material dasar':
+                    case 'material':
+                        categoryName = this.t('Material Dasar', 'Basic Materials');
+                        break;
 
-          // rotate ads softly
-          setInterval(() => { this.currentAd = (this.currentAd + 1) % this.ads.length }, 8000);
+                    case 'perkakas':
+                        categoryName = this.t('Perkakas', 'Tools');
+                        break;
 
-          // close mobile menu on route change
-          this.$watch('page', () => { this.mobileMenu = false; });
+                    case 'listrik':
+                        categoryName = this.t('Listrik', 'Electrical');
+                        break;
+
+                    case 'finishing':
+                        categoryName = this.t('Finishing', 'Finishing');
+                        break;
+
+                    default:
+                        categoryName = p.category;
+                }
+
+                return {
+                    name: p.name,
+                    category: categoryName,
+                    price: 'Rp ' + Number(p.price).toLocaleString('id-ID'),
+                    stock: p.stock,
+                    image: p.image ? '/' + p.image : 'https://via.placeholder.com/400'
+                };
+            });
+
+            // ROTASI IKLAN
+            setInterval(() => {
+                this.currentAd = (this.currentAd + 1) % this.ads.length;
+            }, 8000);
+
+            // Tutup menu setelah pindah halaman
+            this.$watch('page', () => {
+                this.mobileMenu = false;
+            });
         },
+
 
         t(id, en){ return this.language === 'id' ? id : en },
 
@@ -308,7 +333,7 @@
         handleCategoryNavigation(catKey){ this.page = catKey; window.scrollTo({ top: 0, behavior: 'smooth' }) },
         handleBackToHome(){ this.page = 'beranda'; window.scrollTo({ top: 0, behavior: 'smooth' }) },
 
-        openMap(){ window.open('https://www.google.com/maps?q=C6n6kRr05CSvAxGI5', '_blank') },
+        openMap(){ window.open('https://maps.app.goo.gl/r3GUAqkB2N5X8xw47', '_blank') },
 
         filteredCatalog(){ const q = this.search.toLowerCase(); return this.catalog.filter(item => item.name.toLowerCase().includes(q)) },
 
@@ -341,5 +366,6 @@
       }
     }
   </script>
+
 </body>
 </html>
