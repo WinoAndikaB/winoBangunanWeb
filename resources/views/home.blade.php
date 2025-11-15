@@ -236,79 +236,397 @@
 
 
     <!-- Partner, kontak, tentang sections simplified -->
-    <section x-show="page === 'partner'" class="prose prose-lg mx-auto text-center" x-cloak>
-    <h2 class="text-2xl font-semibold text-green-600">
+    <section 
+      x-show="page === 'partner'" 
+      class="py-10"
+      x-cloak
+    >
+      <h2 class="text-3xl font-bold text-green-600 text-center mb-6">
         <span x-text="language === 'id' ? 'Partner Kami' : 'Our Partners'"></span>
-    </h2>
-    <p x-text="language === 'id' ? 
-        'Kami bekerja sama dengan berbagai merek terpercaya dalam bidang bahan bangunan dan perkakas.' : 
-        'We collaborate with trusted brands in construction materials and tools.'
-    "></p>
+      </h2>
+
+      <p class="text-center text-gray-500 max-w-2xl mx-auto mb-10">
+        <span x-text="language === 'id' 
+          ? 'Kami bekerja sama dengan berbagai perusahaan bahan bangunan terkemuka.' 
+          : 'We collaborate with leading construction material brands.'"></span>
+      </p>
+
+      <!-- GRID PARTNER -->
+      <div 
+        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 max-w-6xl mx-auto px-4"
+      >
+
+        <!-- Card Avian -->
+        <div 
+          class="p-5 rounded-xl shadow-sm border hover:shadow-md transition bg-white"
+          :class="darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'"
+        >
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Avian_Brands_Logo.png" 
+              alt="Avian" 
+              class="w-full h-20 object-contain mb-3">
+          <h3 class="text-center font-semibold">Avian</h3>
+        </div>
+
+        <!-- Card Dulux -->
+        <div 
+          class="p-5 rounded-xl shadow-sm border hover:shadow-md transition"
+          :class="darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'"
+        >
+          <img src="https://seeklogo.com/images/D/dulux-logo-0B31C5F4F3-seeklogo.com.png" 
+              alt="Dulux" 
+              class="w-full h-20 object-contain mb-3">
+          <h3 class="text-center font-semibold">Dulux</h3>
+        </div>
+
+        <!-- Card Nippon Paint -->
+        <div 
+          class="p-5 rounded-xl shadow-sm border hover:shadow-md transition"
+          :class="darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'"
+        >
+          <img src="https://upload.wikimedia.org/wikipedia/en/8/84/Nippon_Paint_logo.png" 
+              alt="Nippon Paint" 
+              class="w-full h-20 object-contain mb-3">
+          <h3 class="text-center font-semibold">Nippon Paint</h3>
+        </div>
+
+        <!-- Card Tiga Roda -->
+        <div 
+          class="p-5 rounded-xl shadow-sm border hover:shadow-md transition"
+          :class="darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'"
+        >
+          <img src="https://upload.wikimedia.org/wikipedia/en/c/c3/Tiga_Roda.png" 
+              alt="Tiga Roda" 
+              class="w-full h-20 object-contain mb-3">
+          <h3 class="text-center font-semibold">Tiga Roda</h3>
+        </div>
+
+        <!-- Card Holcim / Dynamix -->
+        <div 
+          class="p-5 rounded-xl shadow-sm border hover:shadow-md transition"
+          :class="darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'"
+        >
+          <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Holcim-logo.svg" 
+              alt="Holcim" 
+              class="w-full h-16 object-contain mb-3">
+          <h3 class="text-center font-semibold">Holcim / Dynamix</h3>
+        </div>
+
+      </div>
     </section>
 
-    <section x-show="page === 'kontak'" class="prose prose-lg mx-auto text-center" x-cloak>
-      <h2 class="text-2xl font-semibold text-green-600"> <span x-text="language === 'id' ? 'Kontak Kami' : 'Contact Us'"></span></h2>
-      <p> <span x-text="language === 'id' ? 'Alamat: Jl. Veteran No.33, Langkae Araya, Kec. Towuti, Kabupaten Luwu Timur, Sulawesi Selatan 92982' : 'Address: Jl. Veteran No.33, Langkae Araya, Kec. Towuti, Kabupaten Luwu Timur, Sulawesi Selatan 92982'"></span></p>
-      <p> <span x-text="language === 'id' ? 'Telepon: (021) 555-6789' : 'Phone: (021) 555-6789'"></span></p>
-      <p>Email: info@winobangunan.com</p>
-      <button @click="openMap()" class="mt-3 px-4 py-2 rounded-full bg-green-600 text-white">Lihat di Google Maps</button>
+
+    <section 
+      x-show="page === 'kontak'" 
+      x-cloak
+      class="py-14 px-4"
+    >
+      <div class="max-w-5xl mx-auto">
+
+        <!-- Title -->
+        <div class="text-center mb-12">
+          <h2 class="text-4xl font-bold text-green-600 mb-3">
+            <span x-text="language === 'id' ? 'Kontak Kami' : 'Contact Us'"></span>
+          </h2>
+          <p class="text-gray-500 max-w-xl mx-auto">
+            <span x-text="language === 'id' 
+              ? 'Hubungi kami untuk pertanyaan, pemesanan, atau informasi lebih lanjut.' 
+              : 'Contact us for inquiries, orders, or more information.'">
+            </span>
+          </p>
+        </div>
+
+        <!-- Contact Box -->
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 rounded-3xl shadow-xl overflow-hidden"
+          :class="darkMode ? 'bg-gray-800 text-gray-100' : 'bg-white'"
+        >
+
+          <!-- LEFT SIDE (Info) -->
+          <div 
+            class="p-10 bg-gradient-to-br from-green-600 to-green-500 text-white"
+          >
+            <h3 class="text-2xl font-semibold mb-6">Wino Bangunan</h3>
+
+            <div class="space-y-6">
+
+              <!-- Address -->
+              <div class="flex items-start gap-4">
+                <svg class="w-7 h-7" fill="none" stroke="white" stroke-width="1.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 21s-6-4.35-6-10a6 6 0 1112 0c0 5.65-6 10-6 10z" />
+                </svg>
+                <p>
+                  <span x-text="language==='id' 
+                    ? 'Jl. Veteran No.33, Langkae Araya, Towuti, Luwu Timur, Sulawesi Selatan'
+                    : 'Jl. Veteran No.33, Langkae Araya, Towuti District, East Luwu, South Sulawesi'"></span>
+                </p>
+              </div>
+
+              <!-- Phone -->
+              <div class="flex items-start gap-4">
+                <svg class="w-7 h-7" fill="none" stroke="white" stroke-width="1.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" 
+                    d="M3 5a2 2 0 012-2h1.28c.45 0 .86.27 1.03.68l1.2 3a1 1 0 01-.27 1.12l-1.4 1.4a14 14 0 006.2 6.2l1.4-1.4a1 1 0 011.12-.27l3 1.2c.41.17.68.58.68 1.03V19a2 2 0 01-2 2h-1C8.82 21 3 15.18 3 8V7a2 2 0 012-2z" />
+                </svg>
+                <p>
+                  <span x-text="language==='id' ? 'Telepon: (021) 555-6789' : 'Phone: (021) 555-6789'"></span>
+                </p>
+              </div>
+
+              <!-- Email -->
+              <div class="flex items-start gap-4">
+                <svg class="w-7 h-7" fill="none" stroke="white" stroke-width="1.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" 
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <p>info@winobangunan.com</p>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- RIGHT SIDE (Button + extras) -->
+          <div 
+            class="p-10 flex flex-col justify-center"
+            :class="darkMode ? 'bg-gray-900' : 'bg-gray-50'"
+          >
+            <h3 class="text-xl font-semibold mb-4"
+                :class="darkMode ? 'text-white' : 'text-gray-800'">
+              <span x-text="language==='id' ? 'Lokasi Kami' : 'Our Location'"></span>
+            </h3>
+
+            <p class="mb-6 text-gray-500"
+              :class="darkMode ? 'text-gray-300' : 'text-gray-600'">
+              <span x-text="language==='id'
+                ? 'Klik tombol di bawah untuk melihat lokasi kami di Google Maps.'
+                : 'Click the button below to view our location on Google Maps.'"></span>
+            </p>
+
+            <button 
+              @click="openMap()"
+              class="px-6 py-3 bg-green-600 text-white rounded-full shadow hover:bg-green-700 transition text-lg w-fit"
+            >
+              <span x-text="language==='id' ? 'Lihat di Google Maps' : 'Open Google Maps'"></span>
+            </button>
+          </div>
+
+        </div>
+      </div>
     </section>
 
-    <section x-show="page === 'tentang kami'" class="prose prose-lg mx-auto text-center" x-cloak>
-      <h2 class="text-2xl font-semibold text-green-600"> <span x-text="language === 'id' ? 'Tentang Wino Bangunan' : 'About Wino Bangunan'"></span></h2>
-   <div>
-    <!-- Paragraf 1 -->
-    <p x-show="language === 'id'">
-        Wino Bangunan adalah toko bangunan terpercaya yang menyediakan berbagai kebutuhan material dasar, perkakas, perlengkapan listrik, dan finishing untuk segala jenis proyek konstruksi. Sejak berdiri, Wino Bangunan berkomitmen untuk menghadirkan produk berkualitas tinggi dengan harga yang kompetitif, sehingga pelanggan dapat menyelesaikan proyek mereka dengan hasil terbaik.
-    </p>
-    <p x-show="language === 'en'">
-        Wino Bangunan is a trusted building supply store that provides a wide range of essential materials, tools, electrical equipment, and finishing products for all types of construction projects. Since its establishment, Wino Bangunan has been committed to offering high-quality products at competitive prices, ensuring that customers can complete their projects with the best possible results.
-    </p>
 
-    <!-- Paragraf 2 -->
-    <p x-show="language === 'id'">
-        Selain menyediakan berbagai jenis material bangunan, Wino Bangunan juga terus mengikuti perkembangan teknologi dan inovasi terbaru di industri konstruksi. Kami bekerja sama dengan merek-merek ternama dan pemasok terpercaya untuk memastikan setiap produk yang tersedia memiliki standar kualitas yang tinggi dan memenuhi kebutuhan pelanggan, baik untuk proyek kecil maupun besar.
-    </p>
-    <p x-show="language === 'en'">
-        In addition to offering various construction materials, Wino Bangunan continuously follows the latest technological developments and innovations in the construction industry. We collaborate with well-known brands and reliable suppliers to ensure that every product available meets high quality standards and fulfills customer needs, whether for small or large-scale projects.
-    </p>
+   <section 
+  x-show="page === 'tentang kami'" 
+  x-cloak
+  class="py-16 px-4"
+>
+  <div class="max-w-6xl mx-auto">
 
-    <!-- Paragraf 3 -->
-    <p x-show="language === 'id'">
-        Kami percaya bahwa pelayanan adalah kunci dalam membangun kepercayaan. Karena itu, tim kami selalu siap memberikan konsultasi dan rekomendasi terbaik sesuai kebutuhan pelanggan. Mulai dari pemilihan material, perhitungan jumlah kebutuhan, hingga tips penggunaan, semua kami sediakan untuk membantu pelanggan membuat keputusan yang tepat dan efisien.
-    </p>
-    <p x-show="language === 'en'">
-        We believe that excellent service is the key to building trust. That is why our team is always ready to provide the best consultation and recommendations based on customer needs. From choosing the right materials, calculating required quantities, to usage tips, we offer comprehensive support to help customers make accurate and efficient decisions.
-    </p>
+    <!-- HERO TOP -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center mb-16">
 
-    <!-- Paragraf 4 -->
-    <p x-show="language === 'id'">
-        Dengan pengalaman bertahun-tahun dalam melayani masyarakat, Wino Bangunan terus berkembang dan memperluas layanan agar dapat menjangkau lebih banyak pelanggan di berbagai daerah. Visi kami adalah menjadi mitra terpercaya bagi setiap orang yang ingin membangun, merenovasi, atau memperbaiki hunian dan bangunan mereka, dengan memberikan solusi lengkap, cepat, dan terpercaya.
-    </p>
-    <p x-show="language === 'en'">
-        With years of experience serving the community, Wino Bangunan continues to grow and expand its services to reach more customers in various regions. Our vision is to become a trusted partner for anyone looking to build, renovate, or improve their home or building by providing complete, fast, and reliable solutions.
-    </p>
+      <!-- LEFT: Text -->
+      <div>
+        <h2 class="text-4xl font-extrabold text-green-600 mb-4 leading-tight">
+          <span x-text="language === 'id' ? 'Tentang Wino Bangunan' : 'About Wino Bangunan'"></span>
+        </h2>
+        <p class="text-gray-500 text-lg max-w-md"
+           :class="darkMode ? 'text-gray-300' : 'text-gray-600'">
+          <span x-text="language==='id'
+            ? 'Lebih dari sekadar toko bangunan — kami adalah mitra Anda dalam setiap proyek.'
+            : 'More than just a building store — we are your partner in every project.'"></span>
+        </p>
+      </div>
+
+      <!-- RIGHT: Hero Image -->
+      <div class="rounded-3xl overflow-hidden shadow-lg">
+        <img src="https://source.unsplash.com/800x600/?construction,store" 
+             alt="Construction Store" 
+             class="w-full h-72 object-cover">
+      </div>
     </div>
-    </section>
+
+
+    <!-- ABOUT CONTENT CARD -->
+    <div 
+      class="rounded-3xl p-10 shadow-xl mb-16"
+      :class="darkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-700'"
+    >
+
+      <div class="space-y-6 text-lg leading-relaxed">
+
+        <!-- PARAGRAPH 1 -->
+        <p x-show="language==='id'">
+          Wino Bangunan adalah toko bangunan terpercaya yang menyediakan material dasar, perkakas, perlengkapan listrik, dan produk finishing untuk berbagai jenis proyek konstruksi. Kami selalu menjaga kualitas dan harga terbaik untuk pelanggan.
+        </p>
+        <p x-show="language==='en'">
+          Wino Bangunan is a trusted construction materials store offering essentials, tools, electrical supplies, and finishing products. We consistently provide the best quality and pricing for our customers.
+        </p>
+
+        <!-- PARAGRAPH 2 -->
+        <p x-show="language==='id'">
+          Kami mengikuti perkembangan teknologi dan bekerja sama dengan merek ternama untuk memastikan produk yang kami sediakan memenuhi standar industri.
+        </p>
+        <p x-show="language==='en'">
+          We follow technological developments and collaborate with well-known brands to ensure every product meets industry standards.
+        </p>
+
+        <!-- PARAGRAPH 3 -->
+        <p x-show="language==='id'">
+          Pelayanan adalah prioritas utama kami. Tim kami selalu siap membantu dalam memilih produk, memberikan rekomendasi, dan memastikan Anda mendapatkan solusi terbaik.
+        </p>
+        <p x-show="language==='en'">
+          Service is our top priority. Our team is always ready to help with product selection, recommendations, and ensuring you get the best solutions.
+        </p>
+
+        <!-- PARAGRAPH 4 -->
+        <p x-show="language==='id'">
+          Dengan pengalaman bertahun-tahun, kami terus berkembang agar dapat menjadi mitra terpercaya dalam membangun dan memperbaiki hunian atau proyek Anda.
+        </p>
+        <p x-show="language==='en'">
+          With years of experience, we continue to grow and aim to be your trusted partner for building or improving your property.
+        </p>
+
+      </div>
+    </div>
+
+
+    <!-- HIGHLIGHT FEATURES -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+      <!-- Feature 1 -->
+      <div 
+        class="p-8 rounded-2xl shadow-lg text-center"
+        :class="darkMode ? 'bg-gray-900 border border-gray-700' : 'bg-green-50 border border-green-200'"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto mb-4 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M3 3h18M3 9h18M3 15h18M3 21h18" />
+        </svg>
+        <h3 class="text-xl font-semibold mb-2">Produk Lengkap</h3>
+        <p class="text-gray-600" :class="darkMode ? 'text-gray-300' : ''">
+          Material dasar, listrik, finishing, dan perkakas.
+        </p>
+      </div>
+
+      <!-- Feature 2 -->
+      <div 
+        class="p-8 rounded-2xl shadow-lg text-center"
+        :class="darkMode ? 'bg-gray-900 border border-gray-700' : 'bg-green-50 border border-green-200'"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto mb-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                d="M12 6v6l4 2m-4-14a10 10 0 100 20 10 10 0 000-20z" />
+        </svg>
+        <h3 class="text-xl font-semibold mb-2">Pelayanan Cepat</h3>
+        <p class="text-gray-600" :class="darkMode ? 'text-gray-300' : ''">
+          Respons cepat & ramah untuk semua kebutuhan Anda.
+        </p>
+      </div>
+
+      <!-- Feature 3 -->
+      <div 
+        class="p-8 rounded-2xl shadow-lg text-center"
+        :class="darkMode ? 'bg-gray-900 border border-gray-700' : 'bg-green-50 border border-green-200'"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto mb-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                d="M3 12l2-2 4 4 8-8 2 2-10 10L3 12z" />
+        </svg>
+        <h3 class="text-xl font-semibold mb-2">Kualitas Terjamin</h3>
+        <p class="text-gray-600" :class="darkMode ? 'text-gray-300' : ''">
+          Bekerja sama dengan brand terpercaya di Indonesia.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
 
   </main>
 
-<!-- FOOTER -->
-<footer 
-  :class="darkMode ? 'bg-gray-900 text-gray-300' : 'bg-white text-gray-700'"
-  class="border-t border-gray-200 mt-auto"
->
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-center">
-    <h3 class="text-xl font-semibold text-green-600">Wino Bangunan</h3>
-    <p class="mt-2">Alamat: Jl. Veteran No.33, Langkae Araya, Kec. Towuti, Kabupaten Luwu Timur, Sulawesi Selatan 92982</p>
-    <button @click="openMap()" class="mt-3 px-4 py-2 rounded-full bg-green-600 text-white">Lihat di Google Maps</button>
-    <p class="mt-1">Telepon: (021) 555-6789</p>
-    <p class="mt-1">Email: info@winobangunan.com</p>
-    <p class="mt-6 text-sm">© 2025 Wino Bangunan. 
+  <!-- FOOTER -->
+  <footer 
+    :class="darkMode ? 'bg-gray-900 text-gray-300' : 'bg-gray-100 text-gray-700'"
+    class="mt-16 border-t border-gray-200 pt-12"
+  >
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
+
+      <!-- Brand -->
+      <div>
+        <h3 class="text-2xl font-bold text-green-600 mb-3">Wino Bangunan</h3>
+        <p class="text-sm leading-relaxed">
+          Toko bahan bangunan lengkap untuk semua kebutuhan konstruksi, renovasi, dan perkakas.
+        </p>
+      </div>
+
+      <!-- Menu -->
+      <div>
+        <h4 class="text-lg font-semibold mb-3">Menu</h4>
+        <ul class="space-y-2 text-sm">
+          <li><button @click="page='beranda'" class="hover:text-green-600">Beranda</button></li>
+          <li><button @click="page='partner'" class="hover:text-green-600">Partner</button></li>
+          <li><button @click="page='kontak'" class="hover:text-green-600">Kontak</button></li>
+          <li><button @click="page='tentang kami'" class="hover:text-green-600">Tentang Kami</button></li>
+        </ul>
+      </div>
+
+      <!-- Kontak -->
+      <div>
+        <h4 class="text-lg font-semibold mb-3">Kontak</h4>
+        <p class="text-sm">Jl. Veteran No.33, Luwu Timur</p>
+        <p class="text-sm mt-1">Telepon: (021) 555-6789</p>
+        <p class="text-sm mt-1">Email: info@winobangunan.com</p>
+        <button 
+          @click="openMap()" 
+          class="mt-3 inline-block px-4 py-2 rounded-full bg-green-600 text-white hover:bg-green-700 transition text-sm">
+          Lihat di Google Maps
+        </button>
+      </div>
+
+      <!-- Social Media -->
+      <div>
+        <h4 class="text-lg font-semibold mb-3">Ikuti Kami</h4>
+        <div class="flex items-center gap-4">
+
+          <!-- Facebook -->
+          <a href="#" class="hover:text-green-600 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M22 12a10 10 0 1 0-11.5 9.9v-7h-2v-3h2v-2.3c0-2 1.2-3.1 3-3.1 .9 0 1.8.1 1.8.1v2h-1c-1 0-1.3.6-1.3 1.2V12h2.3l-.4 3h-1.9v7A10 10 0 0 0 22 12z"/>
+            </svg>
+          </a>
+
+          <!-- Instagram -->
+          <a href="#" class="hover:text-green-600 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm10 2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h10zm-5 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm4.8-.9a1.1 1.1 0 1 0 0-2.2 1.1 1.1 0 0 0 0 2.2z"/>
+            </svg>
+          </a>
+
+          <!-- WhatsApp -->
+          <a href="#" class="hover:text-green-600 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2a10 10 0 0 0-8.7 14.9L2 22l5.3-1.4A10 10 0 1 0 12 2zm0 2a8 8 0 1 1-4.2 14.7l-.3-.2-3.1.8.8-3-.2-.3A8 8 0 0 1 12 4zm-4 6c.1 2.6 2.3 4.8 4.9 4.9.4 0 .7-.3.8-.6l.6-1.3c.2-.4 0-.7-.3-.9l-1-.5c-.3-.1-.6 0-.8.2l-.2.3c-.2.1-.4.2-.7 0-.7-.4-1.3-1-1.7-1.7-.1-.3-.1-.5.1-.7l.3-.2c.2-.2.3-.5.2-.8l-.5-1c-.2-.3-.5-.5-.9-.3L8.6 8c-.4.1-.6.4-.6.8z"/>
+            </svg>
+          </a>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom -->
+    <div 
+      class="border-t border-gray-300 mt-10 py-5 text-center text-sm"
+      :class="darkMode ? 'border-gray-700' : ''"
+    >
+      © 2025 Wino Bangunan — 
       <span x-text="language === 'id' ? 'Hak Cipta Dilindungi.' : 'All Rights Reserved.'"></span>
-    </p>
-  </div>
-</footer>
+    </div>
+  </footer>
+
+
 
 
     <script>
