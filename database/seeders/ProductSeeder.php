@@ -16,8 +16,7 @@ class ProductSeeder extends Seeder
             'price' => 54000,
             'image' => 'images/products/semen.jpg'
         ]);
-    }
-}
+
         Product::create([
             'name' => 'Bata Merah',
             'category' => 'Material Dasar',
@@ -25,3 +24,13 @@ class ProductSeeder extends Seeder
             'price' => 1200,
             'image' => 'images/products/bata.jpg'
         ]);
+
+        Product::create([
+            'name' => 'Kabel Listrik',
+            'category' => 'Listrik',
+            'stock' => 300,
+            'price' => 1200,
+            'image' => 'images/products/listrik.jpg'
+        ]);
+    }
+}

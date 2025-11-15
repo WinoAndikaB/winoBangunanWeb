@@ -82,93 +82,158 @@
   </header>
 
   <!-- CATEGORY BAR (desktop compact) -->
-  <nav class="hidden md:block sticky top-16 z-40" :class="darkMode ? 'bg-gray-900 border-b border-gray-800' : 'bg-white border-b border-gray-100'">
+  <nav class="hidden md:block sticky top-16 z-40" 
+    :class="darkMode ? 'bg-gray-900 border-b border-gray-800' : 'bg-white border-b border-gray-100'">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center gap-6 overflow-x-auto py-3 scrollbar-hide text-sm">
-        <template x-for="cat in categories" :key="cat.key">
-          <button @click="handleCategoryNavigation(cat.key)" class="whitespace-nowrap px-2 py-1 rounded-md" :class="page === cat.key ? 'text-green-600 border-b-2 border-green-600 pb-1' : 'hover:text-green-600'">
-            <span x-text="cat.label"></span>
-          </button>
+      <div class="flex items-center justify-center gap-6 overflow-x-auto py-3 scrollbar-hide text-sm">
+        <template x-for="(cat, index) in categories" :key="cat.key">
+          <div class="flex items-center gap-6">
+            <!-- Divider sebelum PARTNER -->
+            <template x-if="cat.key === 'partner'">
+              <div class="h-5 w-[1.5px]" :class="darkMode ? 'bg-gray-700' : 'bg-gray-300'"></div>
+            </template>
+            <!-- Tombol kategori -->
+            <button 
+              @click="handleCategoryNavigation(cat.key)" 
+              class="whitespace-nowrap px-2 py-1 rounded-md" 
+              :class="page === cat.key ? 'text-green-600 border-b-2 border-green-600 pb-1' : 'hover:text-green-600'"
+            >
+              <span x-text="cat.label"></span>
+            </button>
+          </div>
         </template>
       </div>
     </div>
   </nav>
 
+
+
   <!-- MAIN CONTENT -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-    <!-- BERANDA -->
-    <section x-show="page === 'beranda'" class="space-y-12" aria-label="Beranda">
+  <!-- BERANDA -->
+  <section x-show="page === 'beranda'" class="space-y-12" aria-label="Beranda">
 
-      <!-- Hero / Promo banner -->
-      <div class="w-full rounded-2xl overflow-hidden shadow-md">
-        <img :src="ads[currentAd]" alt="Banner promosi" class="w-full h-64 md:h-80 object-cover transition-transform duration-700 hover:scale-105">
-      </div>
+    <!-- Hero / Promo banner -->
+    <div class="w-full rounded-2xl overflow-hidden shadow-md">
+      <img :src="ads[currentAd]" alt="Banner promosi" class="w-full h-64 md:h-80 object-cover transition-transform duration-700 hover:scale-105">
+    </div>
 
-      <!-- Category carousels -->
-      <template x-for="cat in allCategories" :key="cat.id">
-        <section class="space-y-4">
-          <div class="flex items-center justify-between">
-            <h2 class="text-lg sm:text-2xl font-semibold text-green-600" x-text="t(cat.idLabel, cat.enLabel)"></h2>
-            <button @click="handleCategoryNavigation(cat.idLabel)" class="text-sm text-gray-500 hover:text-green-600">Lihat semua</button>
-          </div>
+    <!-- Category carousels -->
+    <template x-for="cat in allCategories" :key="cat.id">
+      <section class="space-y-4">
 
-          <div class="relative group">
-            <!-- left control -->
-            <button @click="scrollCarousel(cat.id, 'left')" class="absolute left-0 top-1/2 -translate-y-1/2 p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition" :class="darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'" aria-label="Geser kiri">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 18l-6-6 6-6"/></svg>
-            </button>
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg sm:text-2xl font-semibold text-green-600" x-text="t(cat.idLabel, cat.enLabel)"></h2>
+          <button @click="handleCategoryNavigation(cat.idLabel)" class="text-sm text-gray-500 hover:text-green-600">Lihat semua</button>
+        </div>
 
-            <!-- carousel -->
-            <div :ref="'carousel-'+cat.id" class="flex gap-4 overflow-x-auto scroll-smooth px-2 py-2 scrollbar-hide snap-x snap-mandatory">
-              <template x-for="(item, index) in filteredCatalogByCategory(cat.id)" :key="index">
-                <article class="w-56 sm:w-60 md:w-64 snap-start flex-shrink-0 rounded-xl border shadow-sm hover:shadow-md transition transform hover:-translate-y-1" :class="darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'">
-                  <div class="flex flex-col h-full">
-                    <div class="h-40 overflow-hidden rounded-t-xl">
-                      <img :src="item.image" :alt="item.name" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
-                    </div>
+        <!-- ======= DATA KOSONG ======= -->
+        <div
+          x-show="filteredCatalogByCategory(cat.id).length === 0"
+          class="w-full py-10 text-center text-gray-400 text-sm">
+          Data Kosong
+        </div>
 
-                    <div class="p-3 flex flex-col gap-2">
-                      <h3 class="text-sm font-medium truncate" x-text="item.name"></h3>
-                      <div class="flex items-center justify-between">
-                        <p class="text-green-600 font-semibold text-sm" x-text="item.price"></p>
-                        <p class="text-xs text-gray-400" x-text="(language === 'id' ? 'Stok' : 'Stock') + ': ' + item.stock"></p>
-                      </div>
+        <!-- ======= DATA ADA ======= -->
+        <div x-show="filteredCatalogByCategory(cat.id).length > 0" class="relative group">
+
+          <!-- left control -->
+          <button @click="scrollCarousel(cat.id, 'left')"
+            class="absolute left-0 top-1/2 -translate-y-1/2 p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition"
+            :class="darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'"
+            aria-label="Geser kiri">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+
+          <!-- carousel -->
+          <div :ref="'carousel-'+cat.id" class="flex gap-4 overflow-x-auto scroll-smooth px-2 py-2 scrollbar-hide snap-x snap-mandatory">
+            <template x-for="(item, index) in filteredCatalogByCategory(cat.id)" :key="index">
+              <article class="w-56 sm:w-60 md:w-64 snap-start flex-shrink-0 rounded-xl border shadow-sm hover:shadow-md transition transform hover:-translate-y-1"
+                :class="darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'">
+
+                <div class="flex flex-col h-full">
+                  <div class="h-40 overflow-hidden rounded-t-xl">
+                    <img :src="item.image" :alt="item.name" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
+                  </div>
+
+                  <div class="p-3 flex flex-col gap-2">
+                    <h3 class="text-sm font-medium truncate" x-text="item.name"></h3>
+                    <div class="flex items-center justify-between">
+                      <p class="text-green-600 font-semibold text-sm" x-text="item.price"></p>
+                      <p class="text-xs text-gray-400" x-text="(language === 'id' ? 'Stok' : 'Stock') + ': ' + item.stock"></p>
                     </div>
                   </div>
-                </article>
-              </template>
-            </div>
+                </div>
 
-            <!-- right control -->
-            <button @click="scrollCarousel(cat.id, 'right')" class="absolute right-0 top-1/2 -translate-y-1/2 p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition" :class="darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'" aria-label="Geser kanan">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 18l6-6-6-6"/></svg>
-            </button>
+              </article>
+            </template>
           </div>
-        </section>
-      </template>
-    </section>
+
+          <!-- right control -->
+          <button @click="scrollCarousel(cat.id, 'right')"
+            class="absolute right-0 top-1/2 -translate-y-1/2 p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition"
+            :class="darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'"
+            aria-label="Geser kanan">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+
+        </div>
+
+      </section>
+    </template>
+
+  </section>
+
 
     <!-- CATEGORY / LIST PAGES -->
     <template x-for="cat in allCategories" :key="cat.id">
       <section x-show="page === cat.idLabel" class="space-y-6" aria-label="Kategori">
+
         <div class="flex items-center justify-between">
           <h2 class="text-2xl font-semibold text-green-600" x-text="t(cat.idLabel, cat.enLabel)"></h2>
-          <button @click="handleBackToHome()" class="text-sm px-4 py-2 rounded-full border bg-white/0 hover:bg-green-50" :class="darkMode ? 'bg-gray-800 border-gray-700 hover:bg-gray-800/90' : ''">Kembali</button>
+          <button @click="handleBackToHome()"
+            class="text-sm px-4 py-2 rounded-full border bg-white/0 hover:bg-green-50"
+            :class="darkMode ? 'bg-gray-800 border-gray-700 hover:bg-gray-800/90' : ''">
+            Kembali
+          </button>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <!-- ======= DATA KOSONG ======= -->
+        <div
+          x-show="filteredCatalogByCategory(cat.id).length === 0"
+          class="w-full py-10 text-center text-gray-400 text-sm">
+          Data Kosong
+        </div>
+
+        <!-- ======= DATA ADA ======= -->
+        <div
+          x-show="filteredCatalogByCategory(cat.id).length > 0"
+          class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+
           <template x-for="(item, index) in filteredCatalogByCategory(cat.id)" :key="index">
-            <article class="rounded-lg border p-3 hover:shadow-md transition" :class="darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'">
-              <img :src="item.image" :alt="item.name" class="w-full h-40 object-cover rounded-md mb-3">
+            <article class="rounded-lg border p-3 hover:shadow-md transition"
+              :class="darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'">
+
+              <img :src="item.image" :alt="item.name"
+                class="w-full h-40 object-cover rounded-md mb-3">
+
               <h3 class="font-medium text-sm truncate" x-text="item.name"></h3>
+
               <p class="text-green-600 font-semibold mt-1" x-text="item.price"></p>
-              <p class="text-xs text-gray-400 mt-1" x-text="(language === 'id' ? 'Stok' : 'Stock') + ': ' + item.stock"></p>
+
+              <p class="text-xs text-gray-400 mt-1"
+                x-text="(language === 'id' ? 'Stok' : 'Stock') + ': ' + item.stock">
+              </p>
+
             </article>
           </template>
+
         </div>
+
       </section>
     </template>
+
 
     <!-- Partner, kontak, tentang sections simplified -->
     <section x-show="page === 'partner'" class="prose prose-lg mx-auto text-center" x-cloak>
@@ -228,17 +293,23 @@
 
   </main>
 
-  <!-- FOOTER -->
-  <footer :class="darkMode ? 'bg-gray-900 text-gray-300' : 'bg-white text-gray-700'" class="border-t border-gray-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-center">
-      <h3 class="text-xl font-semibold text-green-600">Wino Bangunan</h3>
-      <p class="mt-2">Alamat: Jl. Veteran No.33, Langkae Araya, Kec. Towuti, Kabupaten Luwu Timur, Sulawesi Selatan 92982</p>
-      <button @click="openMap()" class="mt-3 px-4 py-2 rounded-full bg-green-600 text-white">Lihat di Google Maps</button>
-      <p class="mt-1">Telepon: (021) 555-6789</p>
-      <p class="mt-1">Email: info@winobangunan.com</p>
-      <p class="mt-6 text-sm">© 2025 Wino Bangunan. <span x-text="language === 'id' ? 'Hak Cipta Dilindungi.' : 'All Rights Reserved.'"></span></p>
-    </div>
-  </footer>
+<!-- FOOTER -->
+<footer 
+  :class="darkMode ? 'bg-gray-900 text-gray-300' : 'bg-white text-gray-700'"
+  class="border-t border-gray-200 mt-auto"
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-center">
+    <h3 class="text-xl font-semibold text-green-600">Wino Bangunan</h3>
+    <p class="mt-2">Alamat: Jl. Veteran No.33, Langkae Araya, Kec. Towuti, Kabupaten Luwu Timur, Sulawesi Selatan 92982</p>
+    <button @click="openMap()" class="mt-3 px-4 py-2 rounded-full bg-green-600 text-white">Lihat di Google Maps</button>
+    <p class="mt-1">Telepon: (021) 555-6789</p>
+    <p class="mt-1">Email: info@winobangunan.com</p>
+    <p class="mt-6 text-sm">© 2025 Wino Bangunan. 
+      <span x-text="language === 'id' ? 'Hak Cipta Dilindungi.' : 'All Rights Reserved.'"></span>
+    </p>
+  </div>
+</footer>
+
 
     <script>
         window.productsFromDB = @json($products);
