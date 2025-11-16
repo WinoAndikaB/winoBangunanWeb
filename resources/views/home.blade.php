@@ -82,17 +82,24 @@
           <span x-text="cat.label"></span>
         </button>
 
-        <!-- GARIS 1 — Setelah Beranda -->
+        <!-- GARIS SETELAH BERANDA -->
         <template x-if="i === 0">
           <div class="border-t my-3"
               :class="darkMode ? 'border-gray-700' : 'border-gray-300'"></div>
         </template>
 
-        <!-- GARIS 2 — Setelah kategori ke-4 -->
-        <template x-if="i === 4">
+        <!-- GARIS SETELAH KATEGORI (item 2) -->
+        <template x-if="i === 1">
           <div class="border-t my-3"
               :class="darkMode ? 'border-gray-700' : 'border-gray-300'"></div>
         </template>
+
+        <!-- GARIS SETELAH KATEGORI RANDOM KE-4 (index 5) -->
+        <template x-if="i === 5">
+          <div class="border-t my-3"
+              :class="darkMode ? 'border-gray-700' : 'border-gray-300'"></div>
+        </template>
+
 
       </div>
     </template>
@@ -121,16 +128,22 @@
             <span x-text="cat.label"></span>
           </button>
 
-          <!-- PEMBATAS 1: Setelah Beranda -->
+          <!-- PEMBATAS SETELAH BERANDA -->
           <template x-if="i === 0">
             <div class="w-px h-5 mx-2"
-                 :class="darkMode ? 'bg-gray-700' : 'bg-gray-300'"></div>
+                :class="darkMode ? 'bg-gray-700' : 'bg-gray-300'"></div>
           </template>
 
-          <!-- PEMBATAS 2: Setelah kategori ke-4 -->
-          <template x-if="i === 4">
+          <!-- PEMBATAS SETELAH KATEGORI (index 1) -->
+          <template x-if="i === 1">
             <div class="w-px h-5 mx-2"
-                 :class="darkMode ? 'bg-gray-700' : 'bg-gray-300'"></div>
+                :class="darkMode ? 'bg-gray-700' : 'bg-gray-300'"></div>
+          </template>
+
+          <!-- PEMBATAS SETELAH KATEGORI RANDOM KE-4 (index 5) -->
+          <template x-if="i === 5">
+            <div class="w-px h-5 mx-2"
+                :class="darkMode ? 'bg-gray-700' : 'bg-gray-300'"></div>
           </template>
 
         </div>
@@ -217,6 +230,35 @@
 
     </section>
   </template>
+</section>
+
+<!-- ===================== HALAMAN KATEGORI ===================== -->
+<section x-show="page === 'kategori'" x-cloak class="space-y-10">
+
+  <div class="flex justify-between items-center">
+    <h2 class="text-2xl font-semibold text-green-600">Semua Kategori</h2>
+    <button @click="handleBackToHome()"
+            class="text-sm px-4 py-2 border rounded-full hover:bg-green-50"
+            :class="darkMode ? 'bg-gray-800 border-gray-700 hover:bg-gray-700' : ''">
+      Kembali
+    </button>
+  </div>
+
+  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+    <template x-for="cat in allCategories" :key="cat.id">
+      <div @click="handleCategoryNavigation(cat.idLabel)"
+           class="p-6 border rounded-2xl shadow hover:shadow-md cursor-pointer transition"
+           :class="darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white'">
+        
+        <h3 class="text-lg font-semibold text-green-600" x-text="cat.idLabel"></h3>
+        <p class="text-sm text-gray-500 mt-1">Klik untuk melihat produk</p>
+
+      </div>
+    </template>
+
+  </div>
+
 </section>
 
 
@@ -597,7 +639,10 @@ function winoApp(){
     },
 
     get categories(){
-      const base = [{ key: 'beranda', label: 'Beranda' }];
+      const base = [
+        { key: 'beranda', label: 'Beranda' },
+        { key: 'kategori', label: 'Kategori' }   // ← TAMBAHAN BARU
+      ];
 
       const shuffled = [...this.allCategories].sort(() => Math.random() - 0.5);
       const randomCats = shuffled.slice(0, 4);
