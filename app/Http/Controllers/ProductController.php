@@ -9,6 +9,12 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::all();
-        return view('home', compact('products'));
+
+        // mengambil kategori unik dari database
+        $categories = Product::select('category')
+            ->distinct()
+            ->pluck('category');
+
+        return view('home', compact('products', 'categories'));
     }
 }
