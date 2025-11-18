@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="id">
 <head>
@@ -10,6 +11,125 @@
     .scrollbar-hide::-webkit-scrollbar { display: none; }
     .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
+
+<!-- ===================== MODERN PREVIEW CSS ===================== -->
+<style>
+/* ====================================================
+   MODAL RESPONSIVE — FIXED DESKTOP + MOBILE LOOK
+==================================================== */
+
+/* Overlay */
+.preview-overlay {
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(12px);
+}
+
+/* Frame container */
+.preview-wrapper {
+    width: 100%;
+    max-width: 420px;
+    max-height: 420px;
+
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    backdrop-filter: blur(16px);
+
+    border-radius: 18px;
+    padding: 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden; 
+}
+
+/* Image */
+.preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    user-select: none;
+    transition: transform .25s ease;
+}
+
+/* Desktop: Keep compact mobile-like look */
+@media (min-width: 768px) {
+    .preview-wrapper {
+        max-width: 480px;
+        max-height: 480px;
+    }
+}
+
+/* Close button */
+.modal-close-btn {
+    top: 20px !important;
+    right: 20px !important;
+
+    width: 42px !important;
+    height: 42px !important;
+
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+
+    backdrop-filter: blur(10px);
+    font-size: 20px;
+}
+
+/* Nav buttons */
+.modal-nav-btn {
+    width: 40px !important;
+    height: 40px !important;
+
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    backdrop-filter: blur(10px);
+
+    font-size: 22px;
+}
+
+/* Fix icon position on desktop */
+@media (min-width: 768px) {
+    .modal-nav-btn {
+        width: 52px !important;
+        height: 52px !important;
+
+        font-size: 30px;
+    }
+}
+
+/* Thumbnails */
+.preview-thumbs {
+    background: rgba(0,0,0,0.3);
+    padding: 10px 12px;
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+}
+
+.preview-thumbs img {
+    width: 58px;
+    height: 58px;
+    object-fit: cover;
+    border-radius: 12px;
+    opacity: .55;
+    transition: .2s;
+}
+
+.preview-thumbs img.active {
+    opacity: 1;
+    transform: scale(1.1);
+    border: 2px solid #22c55e;
+}
+
+.preview-thumbs img:hover {
+    opacity: 1;
+}
+</style>
+
+
+
+
 </head>
 
 <body x-data="winoApp()" :class="darkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-900'">
@@ -154,11 +274,14 @@
     <!-- ===================== BERANDA ===================== -->
     <section x-show="page === 'beranda'" x-cloak class="space-y-12">
 
-      <!-- Hero Slider -->
-      <div class="relative rounded-2xl overflow-hidden shadow-md">
-        <!-- Gambar iklan -->
-        <img src="{{ asset('images/banners.png') }}" class="w-full h-64 md:h-80 object-cover">
-      </div>
+<!-- Hero Slider -->
+<div class="relative w-full overflow-hidden rounded-2xl shadow-md">
+    <img 
+        src="{{ asset('images/banners.png') }}"
+        class="w-full object-cover max-h-[45vh] md:max-h-[55vh] lg:max-h-[60vh]"
+        alt="Hero Banner"
+    >
+</div>
 
       <!-- Category Sections + CAROUSEL -->
       <template x-for="cat in allCategories" :key="cat.id">
@@ -635,82 +758,94 @@
     </div>
 </footer>
 
-<!-- ===================== MODAL PREVIEW ADVANCED ===================== -->
+<!-- ===================== MODAL PREVIEW — FULL MODERN VERSION ===================== -->
 <div 
     x-show="showPreview"
+    x-transition.opacity.duration.200ms
+    class="fixed inset-0 z-[9999] preview-overlay flex items-center justify-center p-4"
     x-cloak
-    x-transition.opacity.duration.300ms
-    class="fixed inset-0 z-[9999] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
-    style="display:none"
+    @click.self="closePreview()"
     @keydown.window.escape="closePreview()"
     @keydown.window.arrowright.prevent="showNextImage()"
     @keydown.window.arrowleft.prevent="showPrevImage()"
 >
-    <!-- overlay to close -->
-    <div class="absolute inset-0" @click="closePreview()"></div>
 
-    <!-- center area -->
-    <div class="relative z-30 w-full max-w-[1100px]">
-
-      <!-- NAME / INFO -->
-      <div class="absolute -top-6 left-1/2 -translate-x-1/2 z-40">
-        <div class="px-5 py-2 rounded-full text-white text-lg font-semibold
-                    bg-black/40 backdrop-blur-xl border border-white/20 shadow-lg">
-          <span x-text="previewName"></span>
-        </div>
-      </div>
-
-      <!-- image + panning wrapper -->
-      <div
-        class="relative bg-white/5 backdrop-blur-2xl border border-white/20 rounded-3xl shadow-2xl p-4 flex items-center justify-center overflow-hidden"
-        style="height: 70vh;"
-        @wheel.prevent="zoom = Math.min(Math.max(zoom + ($event.deltaY * -0.0015), 1), 4)"
-        @mousedown.prevent="isPanning = true; startX = $event.clientX - panX; startY = $event.clientY - panY;"
-        @mouseup.prevent="isPanning = false"
-        @mousemove.prevent="if(isPanning && zoom > 1){ panX = $event.clientX - startX; panY = $event.clientY - startY }"
-        @mouseleave.prevent="isPanning = false"
-        @dblclick.prevent="zoom = zoom === 1 ? 2 : 1; if(zoom===1){ panX = 0; panY = 0 }"
-      >
-        <img
-          :src="previewImage"
-          draggable="false"
-          class="transition-transform duration-150"
-          :style="`transform: translate(${panX}px, ${panY}px) scale(${zoom}); max-width: 100%; max-height: 100%;`"
-        >
-      </div>
-
-      <!-- controls: prev / next / close -->
-      <button
-        @click="showPrevImage()"
-        class="absolute left-4 top-1/2 -translate-y-1/2 z-40 bg-black/30 backdrop-blur-xl border border-white/20 w-12 h-12 rounded-full text-white text-2xl flex items-center justify-center hover:scale-110 transition">
-        ‹
-      </button>
-
-      <button
-        @click="showNextImage()"
-        class="absolute right-4 top-1/2 -translate-y-1/2 z-40 bg-black/30 backdrop-blur-xl border border-white/20 w-12 h-12 rounded-full text-white text-2xl flex items-center justify-center hover:scale-110 transition">
-        ›
-      </button>
-
-      <button
+    <!-- CLOSE BUTTON -->
+    <button
         @click="closePreview()"
-        class="absolute top-4 right-4 z-50 w-12 h-12 rounded-full bg-black/40 backdrop-blur-xl border border-white/20 text-white text-2xl flex items-center justify-center hover:scale-110 transition">
+        class="modal-close-btn absolute top-6 right-6 flex items-center justify-center rounded-full shadow-lg text-white"
+    >
         ✕
-      </button>
+    </button>
 
-      <!-- thumbnails -->
-      <div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-40">
-        <div class="flex gap-3 items-center px-3 py-2 bg-black/30 backdrop-blur-xl rounded-full border border-white/10">
-          <template x-for="(it, i) in previewItems" :key="i">
-            <img :src="it.image" @click="jumpToImage(i)"
-                 class="w-16 h-16 object-cover rounded-xl cursor-pointer transition"
-                 :class="currentIndex === i ? 'ring-2 ring-green-400 scale-110' : 'opacity-70 hover:opacity-100'">
-          </template>
+
+    <!-- MAIN CONTENT -->
+    <div class="relative flex flex-col items-center w-full max-w-5xl">
+
+        <!-- TITLE DESKTOP -->
+        <div class="hidden md:flex mb-4">
+            <div class="px-5 py-2 bg-black/40 backdrop-blur-xl border border-white/10 shadow-lg rounded-full text-white text-lg font-medium">
+                <span x-text="previewName"></span>
+            </div>
         </div>
-      </div>
+
+
+        <!-- IMAGE WRAPPER -->
+        <div class="preview-wrapper">
+            <img 
+                :src="previewImage"
+                class="preview-img"
+                draggable="false"
+                :style="`
+                    transform: translate(${panX}px, ${panY}px) scale(${zoom});
+                `"
+            >
+        </div>
+
+
+        <!-- NAVIGATION DESKTOP -->
+        <button 
+            @click="showPrevImage()"
+            class="hidden md:flex modal-nav-btn absolute left-8 top-1/2 -translate-y-1/2 rounded-full text-white items-center justify-center shadow-md"
+        >
+            ‹
+        </button>
+
+        <button 
+            @click="showNextImage()"
+            class="hidden md:flex modal-nav-btn absolute right-8 top-1/2 -translate-y-1/2 rounded-full text-white items-center justify-center shadow-md"
+        >
+            ›
+        </button>
+
+
+        <!-- MOBILE NAV -->
+        <div class="md:hidden flex justify-between items-center w-full mt-4 px-3">
+            <button @click="showPrevImage()" class="modal-nav-btn rounded-full text-white">‹</button>
+
+            <div class="modal-title-mobile px-4 py-1 rounded-full bg-black/40 backdrop-blur-xl text-white">
+                <span x-text="previewName"></span>
+            </div>
+
+            <button @click="showNextImage()" class="modal-nav-btn rounded-full text-white">›</button>
+        </div>
+
+
+        <!-- THUMBNAILS -->
+        <div class="preview-thumbs flex gap-3 mt-5 overflow-x-auto px-3 pb-3 scrollbar-hide whitespace-nowrap">
+            <template x-for="(it, i) in previewItems" :key="i">
+                <img 
+                    :src="it.image"
+                    @click="jumpToImage(i)"
+                    class="w-16 h-16 object-cover cursor-pointer select-none"
+                    :class="currentIndex === i ? 'active' : ''"
+                >
+            </template>
+        </div>
 
     </div>
 </div>
+
 
 <!-- ===================== ALPINE JS APP (lengkap) ===================== -->
 <script>
@@ -848,32 +983,84 @@ function winoApp(){
        ------------------- */
 
     // Open preview by image URL:
-    openPreview(img){
-      // find the product that matches the clicked image
-      const clicked = this.catalog.find(p => p.image === img);
-      if (!clicked) {
-        // fallback: open single image
+openPreview(img){
+    const clicked = this.catalog.find(p => p.image === img);
+    if (!clicked) {
         this.previewItems = [{ name: 'Gambar', image: img }];
         this.currentIndex = 0;
-      } else {
-        // Get all products in same category as clicked product
+    } else {
         this.previewItems = this.catalog.filter(p => p.category === clicked.category);
-        // find index
         this.currentIndex = this.previewItems.findIndex(p => p.image === img);
         if (this.currentIndex === -1) this.currentIndex = 0;
-      }
+    }
 
-      this.previewImage = this.previewItems[this.currentIndex].image;
-      this.previewName = this.previewItems[this.currentIndex].name || "";
-      this.showPreview = true;
+    this.previewImage = this.previewItems[this.currentIndex].image;
+    this.previewName = this.previewItems[this.currentIndex].name || "";
+    this.showPreview = true;
 
-      // reset zoom and pan
-      this.resetZoomPan();
+    this.resetZoomPan();
 
-      // lock body scroll
-      document.documentElement.style.overflow = 'hidden';
-      document.body.style.overflow = 'hidden';
-    },
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+
+    // 🔥 Tambahkan baris ini
+    this.$nextTick(() => {
+        this.attachZoomEvents();
+    });
+},
+
+
+    /* =============================
+   SCROLL ZOOM (DESKTOP)
+   PINCH ZOOM (MOBILE)
+============================= */
+
+attachZoomEvents() {
+    const wrapper = document.querySelector(".preview-wrapper");
+
+    if (!wrapper) return;
+
+    /* ------ DESKTOP: SCROLL TO ZOOM ------ */
+    wrapper.onwheel = (e) => {
+        e.preventDefault();
+
+        const zoomIntensity = 0.1;
+        if (e.deltaY < 0) {
+            this.zoom = Math.min(this.zoom + zoomIntensity, 5);
+        } else {
+            this.zoom = Math.max(this.zoom - zoomIntensity, 1);
+        }
+    };
+
+    /* ------ MOBILE: PINCH TO ZOOM ------ */
+    let initialDistance = null;
+    let initialZoom = 1;
+
+    wrapper.addEventListener("touchstart", (e) => {
+        if (e.touches.length === 2) {
+            initialDistance = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+            initialZoom = this.zoom;
+        }
+    });
+
+    wrapper.addEventListener("touchmove", (e) => {
+        if (e.touches.length === 2) {
+            e.preventDefault();
+
+            const newDistance = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+
+            const scale = newDistance / initialDistance;
+            this.zoom = Math.min(Math.max(initialZoom * scale, 1), 5);
+        }
+    });
+},
+
 
     closePreview(){
       this.showPreview = false;
