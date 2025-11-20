@@ -153,6 +153,53 @@
     cursor:pointer;
     font-size:20px;
 }
+
+/* ===================== CLOSE BUTTON ANIMATION ===================== */
+
+/* Soft idle pulse (tiap 4 detik) */
+@keyframes softPulse {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.06); }
+    100% { transform: scale(1); }
+}
+
+.animate-close-btn {
+    animation: softPulse 4s ease-in-out infinite;
+}
+
+/* Hover effect - smooth enlarge */
+.animate-close-btn:hover {
+    transform: scale(1.12);
+}
+
+/* Press effect - quick compress */
+.animate-close-btn:active {
+    transform: scale(0.88);
+}
+
+/* ===================== NAV BUTTON ANIMATION ===================== */
+
+/* Soft idle pulse */
+@keyframes navPulse {
+    0%   { transform: translateY(-50%) scale(1); }
+    50%  { transform: translateY(-50%) scale(1.06); }
+    100% { transform: translateY(-50%) scale(1); }
+}
+
+.tp-nav-btn {
+    animation: navPulse 4s ease-in-out infinite;
+    transition: transform .15s ease, background .25s ease;
+}
+
+/* Hover - enlarge */
+.tp-nav-btn:hover {
+    transform: translateY(-50%) scale(1.15);
+}
+
+/* Click - compress */
+.tp-nav-btn:active {
+    transform: translateY(-50%) scale(0.85);
+}
 </style>
 </head>
 
@@ -779,82 +826,89 @@
 
         <div
             class="text-center py-6 border-t opacity-70 mt-6"
-            :class="darkMode ? 'border-gray-700' : 'border-gray-300'"
-        >
+            :class="darkMode ? 'border-gray-700' : 'border-gray-300'">
             © 2025 Wino Bangunan — All Rights Reserved.
         </div>
 
     </div>
 </footer>
 
-<!-- ===================== MODAL PREVIEW ===================== -->
-<div 
-    x-show="showPreview"
-    x-transition
-    class="fixed inset-0 z-[9999] flex items-center justify-center p-4 tp-overlay"
-    x-cloak
-    @click.self="closePreview()"
+        <!-- ===================== MODAL PREVIEW ===================== -->
+        <div 
+            x-show="showPreview"
+            class="fixed inset-0 z-[9999] flex items-center justify-center p-4 tp-overlay"
+            @click.self="closePreview()"
+            x-cloak
+        >
+
+            <!-- MODAL -->
+            <div class="tp-modal relative grid grid-cols-1 md:grid-cols-2">
+
+                <!-- CLOSE BUTTON -->
+<button 
+    @click="closePreview()"
+    class="absolute top-3 right-3 z-30 w-10 h-10
+           rounded-full bg-white shadow-md 
+           flex items-center justify-center text-xl font-bold
+           hover:bg-gray-100 transition 
+           animate-close-btn"
 >
+    ✕
+</button>
 
-    <!-- CLOSE -->
-    <div class="tp-close" @click="closePreview()">✕</div>
+                <!-- LEFT SIDE (IMAGE + CAROUSEL STICK) -->
+                <div class="flex flex-col items-center p-3 w-full">
 
-    <!-- MODAL BOX -->
-    <div class="tp-modal grid grid-cols-1 md:grid-cols-2">
+                    <!-- IMAGE BOX (zoom & pan area only) -->
+                    <div class="tp-image-box w-full relative overflow-hidden rounded-xl">
 
-        <!-- LEFT IMAGE -->
-        <div class="tp-image-box">
-            <img 
-                :src="previewImage"
-                :style="`transform: translate(${panX}px,${panY}px) scale(${zoom})`"
-                draggable="false"
-            >
-        </div>
+                        <img 
+                            :src="previewImage"
+                            class="select-none"
+                            draggable="false"
+                            :style="`
+                                transform: translate(${panX}px, ${panY}px) scale(${zoom});
+                            `"
+                        >
 
-        <!-- RIGHT INFO -->
-        <div class="tp-info">
-            <h3 class="tp-kategori" x-text="previewCategory"></h3>
-            <h2 class="tp-title" x-text="previewName"></h2>
-            <div class="tp-price" x-text="previewPrice"></div>
+                        <!-- NAV BTNS -->
+                        <div class="tp-nav-btn tp-prev" @click="showPrevImage()">‹</div>
+                        <div class="tp-nav-btn tp-next" @click="showNextImage()">›</div>
+                    </div>
 
-            <div class="tp-info-list">
-                <div class="tp-info-row">
-                    <span>ID Produk</span> 
-                    <span x-text="previewId"></span>
+                    <!-- CAROUSEL STICK (TIDAK IKUT GERAK GAMBAR) -->
+                    <div class="w-full flex gap-3 overflow-x-auto scrollbar-hide py-3 mt-3 border-t">
+
+                        <template x-for="(it, i) in previewItems" :key="i">
+                            <img 
+                                :src="it.image"
+                                @click="jumpToImage(i)"
+                                class="w-16 h-16 object-cover rounded-md cursor-pointer border select-none"
+                                :class="currentIndex === i 
+                                    ? 'border-green-500 shadow-md' 
+                                    : 'border-gray-300 opacity-70 hover:opacity-100'"
+                            >
+                        </template>
+
+                    </div>
+
                 </div>
-                <div class="tp-info-row">
-                    <span>Stok</span>
-                    <span x-text="previewStock"></span>
+
+                <!-- RIGHT SIDE -->
+                <div class="tp-info overflow-y-auto max-h-[420px]">
+                    <h3 class="tp-kategori text-green-600 font-semibold" x-text="previewCategory"></h3>
+                    <h2 class="tp-title" x-text="previewName"></h2>
+                    <div class="tp-price" x-text="previewPrice"></div>
+
+                    <div class="tp-info-list">
+                        <div class="tp-info-row"><span>ID Produk</span><span x-text="previewId"></span></div>
+                        <div class="tp-info-row"><span>Stok</span><span x-text="previewStock"></span></div>
+                        <div class="tp-info-row"><span>Tanggal Upload</span><span x-text="previewDate"></span></div>
+                    </div>
                 </div>
-                <div class="tp-info-row">
-                    <span>Tanggal Upload</span>
-                    <span x-text="previewDate"></span>
-                </div>
+
             </div>
-
-            <!-- THUMBNAILS -->
-            <div class="tp-thumbs mt-4">
-                <template x-for="(it,i) in previewItems" :key="i">
-                    <img 
-                        :src="it.image"
-                        @click="jumpToImage(i)"
-                        :class="currentIndex === i ? 'active':''"
-                    >
-                </template>
-            </div>
-
         </div>
-
-        <!-- NAV BUTTONS -->
-        <div class="tp-nav-btn tp-prev hidden md:flex" @click="showPrevImage()">‹</div>
-        <div class="tp-nav-btn tp-next hidden md:flex" @click="showNextImage()">›</div>
-
-    </div>
-
-</div>
-
-
-
 
 
         <!-- IMAGE WRAPPER -->
@@ -871,37 +925,6 @@
                 `"
             >
         </div>
-
-        <!-- PRODUCT INFO – TOKOPEDIA STYLE -->
-<div 
-    class="modal-product-card"
-    :class="darkMode ? 'dark' : ''"
->
-    <div class="modal-info-row">
-        <span class="modal-info-label">Nama Produk</span>
-        <span x-text="previewName"></span>
-    </div>
-
-    <div class="modal-info-row">
-        <span class="modal-info-label">ID Produk</span>
-        <span x-text="previewItems[currentIndex]?.id ?? '-'"></span>
-    </div>
-
-    <div class="modal-info-row">
-        <span class="modal-info-label">Tanggal Upload</span>
-        <span x-text="previewItems[currentIndex]?.created_at ?? '-'"></span>
-    </div>
-
-    <div class="modal-info-row">
-        <span class="modal-info-label">Stok</span>
-        <span x-text="previewItems[currentIndex]?.stock"></span>
-    </div>
-
-    <div class="modal-info-row">
-        <span class="modal-info-label">Harga</span>
-        <span class="modal-price" x-text="previewItems[currentIndex]?.price"></span>
-    </div>
-</div>
 
 
         <!-- NAVIGATION DESKTOP -->
