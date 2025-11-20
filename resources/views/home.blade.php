@@ -200,6 +200,176 @@
 .tp-nav-btn:active {
     transform: translateY(-50%) scale(0.85);
 }
+
+/* ===================== DARK MODE FIX ===================== */
+
+/* BASIC BACKGROUND & TEXT */
+body.bg-gray-900 {
+    background: #0d0d0d !important;      /* ChatGPT black */
+    color: #ececec !important;           /* ChatGPT soft white */
+}
+
+/* Universal border smoothing */
+body.bg-gray-900 * {
+    border-color: #2a2a2a !important;
+    scroll-behavior: smooth;
+}
+
+/* ========================= HEADER ========================= */
+body.bg-gray-900 header {
+    background: #0d0d0d !important;
+    border-bottom: 1px solid #2a2a2a !important;
+}
+
+body.bg-gray-900 header button:hover {
+    background: #1c1c1c !important;
+}
+
+/* ========================= SEARCH ========================= */
+body.bg-gray-900 input[type="search"] {
+    background: #1a1a1a !important;
+    color: #ececec !important;
+    border-color: #2a2a2a !important;
+}
+body.bg-gray-900 input[type="search"]::placeholder {
+    color: #777 !important;
+}
+
+/* ========================= NAVBAR ========================= */
+body.bg-gray-900 nav {
+    background: #0d0d0d !important;
+    border-bottom: 1px solid #2a2a2a !important;
+}
+
+body.bg-gray-900 nav button {
+    color: #dcdcdc !important;
+}
+body.bg-gray-900 nav button:hover {
+    background: #1d1d1d !important;
+    color: #00ff90 !important; /* ChatGPT green-ish accent */
+}
+
+/* ========================= CARDS / PANELS ========================= */
+body.bg-gray-900 .rounded-xl,
+body.bg-gray-900 .rounded-lg,
+body.bg-gray-900 .rounded-2xl,
+body.bg-gray-900 .shadow,
+body.bg-gray-900 .shadow-md {
+    background: #1a1a1a !important;      /* ChatGPT panel */
+    border-color: #2a2a2a !important;
+    color: #ececec !important;
+}
+
+body.bg-gray-900 .rounded-xl:hover,
+body.bg-gray-900 .rounded-lg:hover {
+    background: #222 !important;          /* smooth hover */
+}
+
+/* ========================= PRODUCT CARDS ========================= */
+body.bg-gray-900 article {
+    background: #1a1a1a !important;
+    border-color: #2a2a2a !important;
+    color: #ececec !important;
+}
+
+body.bg-gray-900 article:hover {
+    background: #232323 !important;
+}
+
+body.bg-gray-900 article p {
+    color: #a8a8a8 !important;
+}
+
+/* ========================= KONTAK, PARTNER, TENTANG ========================= */
+body.bg-gray-900 .bg-gray-50,
+body.bg-gray-900 .contact-box,
+body.bg-gray-900 .partner-card {
+    background: #1a1a1a !important;
+    color: #ececec !important;
+}
+
+/* ========================= FOOTER ========================= */
+body.bg-gray-900 footer {
+    background: #0d0d0d !important;
+    color: #dcdcdc !important;
+}
+
+body.bg-gray-900 footer .border-t {
+    border-color: #2a2a2a !important;
+}
+
+body.bg-gray-900 footer a:hover {
+    color: #2df59d !important; /* ChatGPT-style glow green */
+}
+
+/* ========================= BUTTONS ========================= */
+body.bg-gray-900 button {
+    background: #1a1a1a !important;
+    color: #ececec !important;
+    border-color: #2a2a2a !important;
+}
+body.bg-gray-900 button:hover {
+    background: #262626 !important;
+}
+
+/* Green CTA tetap */
+body.bg-gray-900 .bg-green-600 {
+    background: #01a56b !important; /* ChatGPT green */
+}
+body.bg-gray-900 .bg-green-600:hover {
+    background: #00c47f !important;
+}
+
+/* ========================= MODAL (PREVIEW) ========================= */
+body.bg-gray-900 .tp-modal {
+    background: #1a1a1a !important;
+    color: #ececec !important;
+}
+
+body.bg-gray-900 .tp-image-box {
+    background: #161616 !important;
+}
+
+body.bg-gray-900 .tp-info {
+    background: #1a1a1a !important;
+}
+
+body.bg-gray-900 .tp-thumbs {
+    border-color: #2a2a2a !important;
+}
+
+body.bg-gray-900 .tp-close {
+    background: #1f1f1f !important;
+    color: #ececec !important;
+}
+body.bg-gray-900 .tp-close:hover {
+    background: #2b2b2b !important;
+}
+
+body.bg-gray-900 .tp-nav-btn {
+    background: rgba(255,255,255,0.1) !important;
+    color: #fff !important;
+}
+body.bg-gray-900 .tp-nav-btn:hover {
+    background: rgba(255,255,255,0.18) !important;
+}
+
+/* ========================= SCROLLBAR LIKE CHATGPT ========================= */
+body.bg-gray-900 ::-webkit-scrollbar {
+    width: 8px;
+}
+body.bg-gray-900 ::-webkit-scrollbar-track {
+    background: #111;
+}
+body.bg-gray-900 ::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+}
+body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
+    background: #444;
+}
+
+
 </style>
 </head>
 
@@ -316,35 +486,43 @@
      :class="darkMode ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-100'">
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-  <div id="navbar-kategori"
-      class="flex items-center gap-6 py-3 overflow-x-auto scrollbar-hide text-sm cursor-grab select-none whitespace-nowrap">
 
-       
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-center gap-6 py-3 overflow-x-auto scrollbar-hide text-sm">
+    <div class="flex justify-center py-3">
+      <div id="navbar-kategori"
+        class="flex items-center gap-6 overflow-x-auto scrollbar-hide text-sm cursor-grab select-none whitespace-nowrap">
 
-      <template x-for="(cat, i) in categories" :key="cat.key">
-        <div class="flex items-center gap-6">
+        <template x-for="(cat, i) in categories" :key="cat.key">
+          <div class="flex items-center gap-6">
 
-          <button 
-                @click="handleCategoryNavigation(cat.key)"
-                class="px-3 py-1.5 rounded-xl whitespace-nowrap transition-all duration-200"
-                :class="page === cat.key 
-                ? 'bg-orange-500 text-white shadow-md scale-[1.05]' 
-                : 'hover:bg-orange-100 hover:text-orange-700 dark:hover:bg-white/10 dark:hover:text-orange-400'">
-            <span x-text="cat.label"></span>
-          </button>
+            <button 
+              @click="handleCategoryNavigation(cat.key)"
+              class="pb-1 transition-all duration-200 border-b-2"
+              :class="page === cat.key 
+                ? (darkMode 
+                    ? 'text-orange-400 border-orange-400' 
+                    : 'text-orange-600 border-orange-500')
+                : (darkMode
+                    ? 'text-gray-300 border-transparent hover:text-orange-300 hover:border-orange-300'
+                    : 'text-gray-700 border-transparent hover:text-orange-500 hover:border-orange-400')
+              ">
+              <span x-text="cat.label"></span>
+            </button>
 
-          <template x-if="i === 0 || i === 1 || i === 5">
-            <div class="w-px h-5 mx-2" :class="darkMode ? 'bg-gray-700' : 'bg-gray-300'"></div>
-          </template>
+            <!-- Garis pembatas -->
+            <template x-if="i === 0 || i === 1 || i === 5">
+              <div class="w-px h-5 mx-2"
+                   :class="darkMode ? 'bg-gray-700' : 'bg-gray-300'"></div>
+            </template>
 
-        </div>
-      </template>
+          </div>
+        </template>
 
+      </div>
     </div>
+
   </div>
 </nav>
+
 
 <!-- ========================================================= -->
 <!--                        MAIN                               -->
@@ -842,146 +1020,185 @@
 </footer>
 
         <!-- ===================== MODAL PREVIEW ===================== -->
-        <div 
-            x-show="showPreview"
-            class="fixed inset-0 z-[9999] flex items-center justify-center p-4 tp-overlay"
-            @click.self="closePreview()"
-            x-cloak
-        >
-
-            <!-- MODAL -->
-            <div class="tp-modal relative grid grid-cols-1 md:grid-cols-2">
-
-                <!-- CLOSE BUTTON -->
-<button 
-    @click="closePreview()"
-    class="absolute top-3 right-3 z-30 w-10 h-10
-           rounded-full bg-white shadow-md 
-           flex items-center justify-center text-xl font-bold
-           hover:bg-gray-100 transition 
-           animate-close-btn"
+<div 
+    x-show="showPreview"
+    class="fixed inset-0 z-[9999] flex items-center justify-center p-4 tp-overlay"
+    :class="darkMode ? 'bg-black/70' : 'bg-black/40'"
+    @click.self="closePreview()"
+    x-cloak
 >
-    ✕
-</button>
 
-                <!-- LEFT SIDE (IMAGE + CAROUSEL STICK) -->
-                <div class="flex flex-col items-center p-3 w-full">
+    <!-- MODAL WRAPPER -->
+    <div 
+        class="tp-modal relative grid grid-cols-1 md:grid-cols-2"
+        :class="darkMode ? 'bg-gray-900 text-gray-100' : 'bg-white text-gray-900'"
+    >
 
-                    <!-- IMAGE BOX (zoom & pan area only) -->
-                    <div class="tp-image-box w-full relative overflow-hidden rounded-xl">
-
-                        <img 
-                            :src="previewImage"
-                            class="select-none"
-                            draggable="false"
-                            :style="`
-                                transform: translate(${panX}px, ${panY}px) scale(${zoom});
-                            `"
-                        >
-
-                        <!-- NAV BTNS -->
-                        <div class="tp-nav-btn tp-prev" @click="showPrevImage()">‹</div>
-                        <div class="tp-nav-btn tp-next" @click="showNextImage()">›</div>
-                    </div>
-
-                    <!-- CAROUSEL STICK (TIDAK IKUT GERAK GAMBAR) -->
-                    <div class="tp-thumbs w-full flex gap-3 overflow-x-auto scrollbar-hide py-3 mt-3 border-t">
-
-                        <template x-for="(it, i) in previewItems" :key="i">
-                            <img 
-                                :src="it.image"
-                                @click="jumpToImage(i)"
-                                class="w-16 h-16 object-cover rounded-md cursor-pointer border select-none"
-                                :class="currentIndex === i 
-                                    ? 'border-green-500 shadow-md' 
-                                    : 'border-gray-300 opacity-70 hover:opacity-100'"
-                            >
-                        </template>
-
-                    </div>
-
-                </div>
-
-                <!-- RIGHT SIDE -->
-                <div class="tp-info overflow-y-auto max-h-[420px]">
-                    <h3 class="tp-kategori text-green-600 font-semibold" x-text="previewCategory"></h3>
-                    <h2 class="tp-title" x-text="previewName"></h2>
-                    <div class="tp-price" x-text="previewPrice"></div>
-
-                    <div class="tp-info-list">
-                        <div class="tp-info-row"><span>ID Produk</span><span x-text="previewId"></span></div>
-                        <div class="tp-info-row"><span>Stok</span><span x-text="previewStock"></span></div>
-                        <div class="tp-info-row"><span>Tanggal Upload</span><span x-text="previewDate"></span></div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-
-        <!-- IMAGE WRAPPER -->
-        <div 
-          class="preview-wrapper"
-          :class="darkMode ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/20'"
-        >
-            <img 
-                :src="previewImage"
-                class="preview-img"
-                draggable="false"
-                :style="`
-                    transform: translate(${panX}px, ${panY}px) scale(${zoom});
-                `"
-            >
-        </div>
-
-
-        <!-- NAVIGATION DESKTOP -->
+        <!-- CLOSE BUTTON -->
         <button 
-            @click="showPrevImage()"
+            @click="closePreview()"
+            class="absolute top-3 right-3 z-30 w-10 h-10 rounded-full shadow-md 
+                   flex items-center justify-center text-xl font-bold transition animate-close-btn"
             :class="darkMode 
-    ? 'bg-white/10 border-white/20 text-white' 
-    : 'bg-black/10 border-black/20 text-black'"
-class="hidden md:flex modal-nav-btn absolute left-8 top-1/2 -translate-y-1/2 rounded-full items-center justify-center shadow-md"
-
+                ? 'bg-gray-800 text-white hover:bg-gray-700' 
+                : 'bg-white text-black hover:bg-gray-200'"
         >
-            ‹
+            ✕
         </button>
 
-        <button 
-            @click="showNextImage()"
-            class="hidden md:flex modal-nav-btn absolute right-8 top-1/2 -translate-y-1/2 rounded-full text-white items-center justify-center shadow-md"
-        >
-            ›
-        </button>
+        <!-- LEFT SIDE -->
+        <div class="flex flex-col items-center p-3 w-full">
 
+            <!-- IMAGE BOX -->
+            <div 
+                class="tp-image-box w-full relative overflow-hidden rounded-xl"
+                :class="darkMode ? 'bg-gray-800' : 'bg-gray-100'"
+            >
+                <img 
+                    :src="previewImage"
+                    class="select-none"
+                    draggable="false"
+                    :style="`
+                        transform: translate(${panX}px, ${panY}px) scale(${zoom});
+                    `"
+                >
 
-        <!-- MOBILE NAV -->
-        <div class="md:hidden flex justify-between items-center w-full mt-4 px-3">
-            <button @click="showPrevImage()" class="modal-nav-btn rounded-full text-white">‹</button>
+                <!-- NAV BTN PREV -->
+                <div 
+                    class="tp-nav-btn tp-prev"
+                    @click="showPrevImage()"
+                    :class="darkMode 
+                        ? 'bg-white/10 text-white' 
+                        : 'bg-white text-gray-800'"
+                >‹</div>
 
-            <div class="modal-title-mobile px-4 py-1 rounded-full bg-black/40 backdrop-blur-xl text-white">
-                <span x-text="previewName"></span>
+                <!-- NAV BTN NEXT -->
+                <div 
+                    class="tp-nav-btn tp-next"
+                    @click="showNextImage()"
+                    :class="darkMode 
+                        ? 'bg-white/10 text-white' 
+                        : 'bg-white text-gray-800'"
+                >›</div>
             </div>
 
-            <button @click="showNextImage()" class="modal-nav-btn rounded-full text-white">›</button>
+            <!-- THUMB STRIP -->
+            <div 
+                class="tp-thumbs w-full flex gap-3 overflow-x-auto scrollbar-hide py-3 mt-3 border-t"
+                :class="darkMode ? 'border-gray-700' : 'border-gray-300'"
+            >
+                <template x-for="(it, i) in previewItems" :key="i">
+                    <img 
+                        :src="it.image"
+                        @click="jumpToImage(i)"
+                        class="w-16 h-16 object-cover rounded-md cursor-pointer border select-none"
+                        :class="currentIndex === i 
+                            ? 'border-green-500 shadow-md' 
+                            : 'border-gray-400 opacity-70 hover:opacity-100'"
+                    >
+                </template>
+            </div>
+
         </div>
 
+        <!-- RIGHT SIDE -->
+        <div 
+            class="tp-info overflow-y-auto max-h-[420px]"
+            :class="darkMode ? 'bg-gray-900 text-gray-100' : 'bg-white text-gray-900'"
+        >
+            <h3 class="tp-kategori text-green-600 font-semibold" x-text="previewCategory"></h3>
+            <h2 class="tp-title" x-text="previewName"></h2>
+            <div class="tp-price" x-text="previewPrice"></div>
 
-        <!-- THUMBNAILS -->
-        <div class="preview-thumbs flex gap-3 mt-5 overflow-x-auto px-3 pb-3 scrollbar-hide whitespace-nowrap">
-            <template x-for="(it, i) in previewItems" :key="i">
-                <img 
-                    :src="it.image"
-                    @click="jumpToImage(i)"
-                    class="w-16 h-16 object-cover cursor-pointer select-none rounded-md border"
-                    :class="currentIndex === i ? 'border-green-500 shadow-md' : 'border-gray-300'"
-                >
-            </template>
+            <div class="tp-info-list">
+                <div class="tp-info-row">
+                    <span>ID Produk</span><span x-text="previewId"></span>
+                </div>
+                <div class="tp-info-row">
+                    <span>Stok</span><span x-text="previewStock"></span>
+                </div>
+                <div class="tp-info-row">
+                    <span>Tanggal Upload</span><span x-text="previewDate"></span>
+                </div>
+            </div>
         </div>
 
     </div>
 </div>
 
+<!-- ================= PREVIEW WRAPPER (ZOOM AREA) ================= -->
+<div 
+    class="preview-wrapper"
+    :class="darkMode ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/20'"
+>
+    <img 
+        :src="previewImage"
+        class="preview-img"
+        draggable="false"
+        :style="`
+            transform: translate(${panX}px, ${panY}px) scale(${zoom});
+        `"
+    >
+</div>
+
+<!-- NAV DESKTOP -->
+<button 
+    @click="showPrevImage()"
+    class="hidden md:flex modal-nav-btn absolute left-8 top-1/2 -translate-y-1/2 rounded-full items-center justify-center shadow-md"
+    :class="darkMode 
+        ? 'bg-white/10 border-white/20 text-white' 
+        : 'bg-black/10 border-black/20 text-black'"
+>
+    ‹
+</button>
+
+<button 
+    @click="showNextImage()"
+    class="hidden md:flex modal-nav-btn absolute right-8 top-1/2 -translate-y-1/2 rounded-full items-center justify-center shadow-md"
+    :class="darkMode 
+        ? 'bg-white/10 border-white/20 text-white' 
+        : 'bg-black/10 border-black/20 text-black'"
+>
+    ›
+</button>
+
+<!-- MOBILE NAV -->
+<div class="md:hidden flex justify-between items-center w-full mt-4 px-3">
+    <button 
+        @click="showPrevImage()" 
+        class="modal-nav-btn rounded-full"
+        :class="darkMode ? 'bg-white/20 text-white' : 'bg-black/20 text-black'"
+    >‹</button>
+
+    <div 
+        class="modal-title-mobile px-4 py-1 rounded-full backdrop-blur-xl"
+        :class="darkMode ? 'bg-white/10 text-white' : 'bg-black/40 text-white'"
+    >
+        <span x-text="previewName"></span>
+    </div>
+
+    <button 
+        @click="showNextImage()" 
+        class="modal-nav-btn rounded-full"
+        :class="darkMode ? 'bg-white/20 text-white' : 'bg-black/20 text-black'"
+    >›</button>
+</div>
+
+<!-- BOTTOM THUMBS -->
+<div 
+    class="preview-thumbs flex gap-3 mt-5 overflow-x-auto px-3 pb-3 scrollbar-hide whitespace-nowrap"
+>
+    <template x-for="(it, i) in previewItems" :key="i">
+        <img 
+            :src="it.image"
+            @click="jumpToImage(i)"
+            class="w-16 h-16 object-cover cursor-pointer select-none rounded-md border"
+            :class="currentIndex === i 
+                ? 'border-green-500 shadow-md' 
+                : (darkMode ? 'border-gray-600' : 'border-gray-300')"
+        >
+    </template>
+</div>
 
 <!-- ===================== ALPINE JS APP (lengkap) ===================== -->
 <script>
