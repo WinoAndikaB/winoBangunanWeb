@@ -290,8 +290,10 @@
 
         <!-- Item Menu -->
         <button @click="handleCategoryNavigation(cat.key)"
-                class="w-full text-left px-2 py-2 rounded-md hover:bg-gray-100"
-                :class="darkMode ? 'hover:bg-white/10' : ''">
+        class="w-full text-left px-3 py-2 rounded-lg transition-all"
+        :class="page === cat.key
+            ? 'bg-orange-500 text-white shadow-md scale-[1.02]' 
+            : (darkMode ? 'hover:bg-white/10' : 'hover:bg-orange-50')"
           <span x-text="cat.label"></span>
         </button>
 
@@ -324,9 +326,12 @@
       <template x-for="(cat, i) in categories" :key="cat.key">
         <div class="flex items-center gap-6">
 
-          <button @click="handleCategoryNavigation(cat.key)"
-                  class="px-2 py-1 whitespace-nowrap"
-                  :class="page === cat.key ? 'border-b-2 border-green-600 text-green-600' : 'hover:text-green-600'">
+          <button 
+                @click="handleCategoryNavigation(cat.key)"
+                class="px-3 py-1.5 rounded-xl whitespace-nowrap transition-all duration-200"
+                :class="page === cat.key 
+                ? 'bg-orange-500 text-white shadow-md scale-[1.05]' 
+                : 'hover:bg-orange-100 hover:text-orange-700 dark:hover:bg-white/10 dark:hover:text-orange-400'">
             <span x-text="cat.label"></span>
           </button>
 
@@ -440,8 +445,11 @@
 
         <template x-for="cat in allCategories" :key="cat.id">
           <div @click="handleCategoryNavigation(cat.idLabel)"
-               class="p-6 border rounded-2xl shadow hover:shadow-md cursor-pointer transition"
-               :class="darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white'">
+               class="p-6 border rounded-2xl shadow cursor-pointer transition-all duration-200"
+              :class="page === cat.idLabel
+                  ? 'bg-orange-500 text-white shadow-lg scale-[1.03]'
+                  : (darkMode ? 'bg-gray-800 border-gray-700 hover:bg-gray-700' : 'bg-white hover:bg-green-50')"
+
             
             <h3 class="text-lg font-semibold text-green-600" x-text="cat.idLabel"></h3>
             <p class="text-sm text-gray-500 mt-1">Klik untuk melihat produk</p>
@@ -877,7 +885,7 @@
                     </div>
 
                     <!-- CAROUSEL STICK (TIDAK IKUT GERAK GAMBAR) -->
-                    <div class="w-full flex gap-3 overflow-x-auto scrollbar-hide py-3 mt-3 border-t">
+                    <div class="tp-thumbs w-full flex gap-3 overflow-x-auto scrollbar-hide py-3 mt-3 border-t">
 
                         <template x-for="(it, i) in previewItems" :key="i">
                             <img 
@@ -1147,7 +1155,10 @@ openPreview(img){
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
 
-    this.$nextTick(() => this.attachZoomEvents());
+    this.$nextTick(() => {
+        this.attachZoomEvents();
+        this.scrollThumbnailIntoView();  // ⬅️ Tambahkan ini
+    });
 },
 
 
@@ -1233,6 +1244,7 @@ attachZoomEvents() {
         this.previewCategory = item.category || "-";
 
         this.resetZoomPan();
+        this.$nextTick(() => this.scrollThumbnailIntoView());
     },
 
     showPrevImage(){
@@ -1251,6 +1263,7 @@ attachZoomEvents() {
         this.previewCategory = item.category || "-";
 
         this.resetZoomPan();
+        this.$nextTick(() => this.scrollThumbnailIntoView());
     },
 
     jumpToImage(i){
@@ -1269,16 +1282,42 @@ attachZoomEvents() {
         this.previewCategory = item.category || "-";
 
         this.resetZoomPan();
+        this.$nextTick(() => this.scrollThumbnailIntoView()); 
     },
 
     resetZoomPan(){
-      this.zoom = 1;
-      this.panX = 0;
-      this.panY = 0;
-      this.isPanning = false;
-      this.startX = 0;
-      this.startY = 0;
-    }
+        this.zoom = 1;
+        this.panX = 0;
+        this.panY = 0;
+        this.isPanning = false;
+        this.startX = 0;
+        this.startY = 0;
+    },
+
+    // =============================
+    // AUTO SCROLL THUMBNAIL ACTIVE
+    // =============================
+    scrollThumbnailIntoView() {
+        const container = document.querySelector(".tp-thumbs");
+        if (!container) return;
+
+        const thumbs = container.querySelectorAll("img");
+        const activeThumb = thumbs[this.currentIndex];
+        if (!activeThumb) return;
+
+        const containerRect = container.getBoundingClientRect();
+        const thumbRect = activeThumb.getBoundingClientRect();
+
+        const offset =
+            thumbRect.left -
+            (containerRect.left + containerRect.width / 2 - thumbRect.width / 2);
+
+        container.scrollBy({
+            left: offset,
+            behavior: "smooth"
+        });
+    },
+
   }
 }
 </script>
@@ -1289,41 +1328,83 @@ window.productsFromDB = @json($products);
 window.categoriesFromDB = @json($categories);
 </script>
 
+
+<!-- ===================== DRAG SCROLL SCRIPT ===================== -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    const slider = document.getElementById("navbar-kategori");
-    if (!slider) return;
 
-    let isDown = false;
-    let startX = 0;
-    let scrollStart = 0;
+    /* =====================================================
+       SMOOTH DRAG + MOMENTUM
+    ===================================================== */
+    function enableSmoothDragScroll(element) {
+        if (!element) return;
 
-    slider.addEventListener("mousedown", (e) => {
-        isDown = true;
-        slider.classList.add("cursor-grabbing");
-        startX = e.pageX;
-        scrollStart = slider.scrollLeft;
-    });
+        let isDown = false;
+        let startX = 0;
+        let scrollStart = 0;
+        let velocity = 0;
+        let lastX = 0;
+        let frame;
+        
+        function momentum() {
+            element.scrollLeft += velocity;
+            velocity *= 0.95; // gesekan
 
-    slider.addEventListener("mouseup", () => {
-        isDown = false;
-        slider.classList.remove("cursor-grabbing");
-    });
+            if (Math.abs(velocity) > 0.5) {
+                frame = requestAnimationFrame(momentum);
+            }
+        }
 
-    slider.addEventListener("mouseleave", () => {
-        isDown = false;
-        slider.classList.remove("cursor-grabbing");
-    });
+        element.addEventListener("mousedown", (e) => {
+            isDown = true;
+            startX = e.pageX;
+            scrollStart = element.scrollLeft;
+            lastX = e.pageX;
 
-    slider.addEventListener("mousemove", (e) => {
-        if (!isDown) return;
-        e.preventDefault();
+            cancelAnimationFrame(frame);
+        });
 
-        const movement = startX - e.pageX;
-        slider.scrollLeft = scrollStart + movement;
-    });
+        element.addEventListener("mousemove", (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+
+            const dx = e.pageX - lastX;
+            velocity = dx; // simpan kecepatan terakhir
+
+            const movement = startX - e.pageX;
+            element.scrollLeft = scrollStart + movement;
+
+            lastX = e.pageX;
+        });
+
+        element.addEventListener("mouseleave", () => {
+            if (isDown) momentum();
+            isDown = false;
+        });
+
+        element.addEventListener("mouseup", () => {
+            isDown = false;
+            momentum(); // jalankan inertia
+        });
+    }
+
+    /* =====================================================
+       AKTIFKAN UNTUK SETIAP AREA
+    ===================================================== */
+
+    // Navbar kategori
+    enableSmoothDragScroll(document.getElementById("navbar-kategori"));
+
+    // Thumbnail atas modal
+    enableSmoothDragScroll(document.querySelector(".tp-thumbs"));
+
+    // Thumbnail bawah modal
+    enableSmoothDragScroll(document.querySelector(".preview-thumbs"));
+
 });
 </script>
+
+
 
 <!-- Preload Refresh Loading -->
 <script>
