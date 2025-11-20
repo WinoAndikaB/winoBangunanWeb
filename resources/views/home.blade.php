@@ -7,6 +7,21 @@
   <title>Wino Bangunan</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+  <!-- ===================== PRELOADER ===================== -->
+<div id="preloader" class="fixed inset-0 z-[999999] flex items-center justify-center bg-white transition-opacity duration-500">
+    <div class="flex flex-col items-center gap-4">
+        
+        <!-- Logo -->
+        <img src="{{ asset('images/lightmode-logo2.png') }}"
+             class="w-28 animate-pulse" 
+             alt="Loading Logo">
+
+        <!-- Loading spinner -->
+        <div class="w-10 h-10 border-4 border-green-600 border-t-transparent rounded-full animate-spin"></div>
+    </div>
+</div>
+
   <style>
     .scrollbar-hide::-webkit-scrollbar { display: none; }
     .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
@@ -139,13 +154,6 @@
     font-size:20px;
 }
 </style>
-
-
-
-
-
-
-
 </head>
 
 <body x-data="winoApp()" :class="darkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-900'">
@@ -1187,27 +1195,57 @@ attachZoomEvents() {
     },
 
     showNextImage(){
-      if (!this.previewItems.length) return;
-      this.currentIndex = (this.currentIndex + 1) % this.previewItems.length;
-      this.previewImage = this.previewItems[this.currentIndex].image;
-      this.previewName = this.previewItems[this.currentIndex].name || "";
-      this.resetZoomPan();
+        if (!this.previewItems.length) return;
+
+        this.currentIndex = (this.currentIndex + 1) % this.previewItems.length;
+
+        const item = this.previewItems[this.currentIndex];
+
+        this.previewImage  = item.image;
+        this.previewName   = item.name || "";
+        this.previewPrice  = item.price || "-";
+        this.previewStock  = item.stock || "-";
+        this.previewId     = item.id || "-";
+        this.previewDate   = item.date || "-";
+        this.previewCategory = item.category || "-";
+
+        this.resetZoomPan();
     },
 
     showPrevImage(){
-      if (!this.previewItems.length) return;
-      this.currentIndex = (this.currentIndex - 1 + this.previewItems.length) % this.previewItems.length;
-      this.previewImage = this.previewItems[this.currentIndex].image;
-      this.previewName = this.previewItems[this.currentIndex].name || "";
-      this.resetZoomPan();
+        if (!this.previewItems.length) return;
+
+        this.currentIndex = (this.currentIndex - 1 + this.previewItems.length) % this.previewItems.length;
+
+        const item = this.previewItems[this.currentIndex];
+
+        this.previewImage  = item.image;
+        this.previewName   = item.name || "";
+        this.previewPrice  = item.price || "-";
+        this.previewStock  = item.stock || "-";
+        this.previewId     = item.id || "-";
+        this.previewDate   = item.date || "-";
+        this.previewCategory = item.category || "-";
+
+        this.resetZoomPan();
     },
 
     jumpToImage(i){
-      if (!this.previewItems.length) return;
-      this.currentIndex = i;
-      this.previewImage = this.previewItems[i].image;
-      this.previewName = this.previewItems[i].name || "";
-      this.resetZoomPan();
+        if (!this.previewItems.length) return;
+
+        this.currentIndex = i;
+
+        const item = this.previewItems[i];
+
+        this.previewImage  = item.image;
+        this.previewName   = item.name || "";
+        this.previewPrice  = item.price || "-";
+        this.previewStock  = item.stock || "-";
+        this.previewId     = item.id || "-";
+        this.previewDate   = item.date || "-";
+        this.previewCategory = item.category || "-";
+
+        this.resetZoomPan();
     },
 
     resetZoomPan(){
@@ -1263,6 +1301,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 </script>
+
+<!-- Preload Refresh Loading -->
+<script>
+window.addEventListener("load", () => {
+    const preloader = document.getElementById("preloader");
+    setTimeout(() => {
+        preloader.style.opacity = 0;
+        preloader.style.pointerEvents = "none";
+
+        setTimeout(() => preloader.remove(), 500);
+    }, 300);
+});
+</script>
+
 
 </body>
 </html>
