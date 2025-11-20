@@ -12,120 +12,136 @@
     .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 
-<!-- ===================== MODERN PREVIEW CSS ===================== -->
+<!-- ===================== MODAL PREVIEW — PREMIUM STYLE ===================== -->
 <style>
-/* ====================================================
-   MODAL RESPONSIVE — FIXED DESKTOP + MOBILE LOOK
-==================================================== */
-
-/* Overlay */
-.preview-overlay {
-    background: rgba(0,0,0,0.85);
-    backdrop-filter: blur(12px);
+/* ========= OVERLAY ========= */
+.tp-overlay {
+    background: rgba(0,0,0,.75);
+    backdrop-filter: blur(6px);
+    animation: fadeIn .25s ease;
 }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
 
-/* Frame container */
-.preview-wrapper {
+/* ========= MODAL WRAPPER ========= */
+.tp-modal {
     width: 100%;
-    max-width: 420px;
-    max-height: 420px;
-
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.15);
-    backdrop-filter: blur(16px);
-
+    max-width: 900px;
+    background: #fff;
     border-radius: 18px;
-    padding: 8px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    overflow: hidden; 
+    overflow: hidden;
+    animation: scaleIn .28s ease;
+}
+@keyframes scaleIn {
+    from { transform: scale(.94); opacity:0 }
+    to   { transform: scale(1); opacity:1 }
 }
 
-/* Image */
-.preview-img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    user-select: none;
-    transition: transform .25s ease;
+/* ========= LEFT IMAGE AREA ========= */
+.tp-image-box{
+    background: #f3f3f3;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    height:420px;
+    position:relative;
+}
+.tp-image-box img{
+    max-width:100%;
+    max-height:100%;
+    transition: transform .3s ease;
+    cursor: grab;
 }
 
-/* Desktop: Keep compact mobile-like look */
-@media (min-width: 768px) {
-    .preview-wrapper {
-        max-width: 480px;
-        max-height: 480px;
-    }
+/* ========= RIGHT INFO AREA ========= */
+.tp-info {
+    padding: 22px;
 }
-
-/* Close button */
-.modal-close-btn {
-    top: 20px !important;
-    right: 20px !important;
-
-    width: 42px !important;
-    height: 42px !important;
-
-    border-radius: 50%;
-    background: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,255,255,0.25);
-
-    backdrop-filter: blur(10px);
-    font-size: 20px;
-}
-
-/* Nav buttons */
-.modal-nav-btn {
-    width: 40px !important;
-    height: 40px !important;
-
-    background: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,255,255,0.25);
-    backdrop-filter: blur(10px);
-
+.tp-title {
     font-size: 22px;
+    font-weight: 700;
+}
+.tp-price {
+    font-size: 26px;
+    font-weight: 700;
+    color:#03ac0e;
+    margin-top:6px;
+}
+.tp-info-list {
+    margin-top:14px;
+    font-size:14px;
+}
+.tp-info-row {
+    display:flex;
+    justify-content:space-between;
+    padding:6px 0;
+    border-bottom:1px solid #eee;
 }
 
-/* Fix icon position on desktop */
-@media (min-width: 768px) {
-    .modal-nav-btn {
-        width: 52px !important;
-        height: 52px !important;
-
-        font-size: 30px;
-    }
+/* ========= THUMBNAIL BAR ========= */
+.tp-thumbs {
+    display:flex;
+    gap:10px;
+    overflow-x:auto;
+    padding:12px;
+}
+.tp-thumbs img{
+    width:62px;
+    height:62px;
+    border-radius:8px;
+    object-fit:cover;
+    border:2px solid transparent;
+    cursor:pointer;
+    opacity:.7;
+    transition:.2s;
+}
+.tp-thumbs img:hover,
+.tp-thumbs img.active {
+    opacity:1;
+    border-color:#03ac0e;
 }
 
-/* Thumbnails */
-.preview-thumbs {
-    background: rgba(0,0,0,0.3);
-    padding: 10px 12px;
-    border-radius: 16px;
-    backdrop-filter: blur(10px);
+/* ========= NAV BUTTONS ========= */
+.tp-nav-btn {
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.85);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:26px;
+    cursor:pointer;
+    box-shadow:0 2px 10px rgba(0,0,0,0.2);
+    transition:.25s;
 }
+.tp-nav-btn:hover { background:white; }
 
-.preview-thumbs img {
-    width: 58px;
-    height: 58px;
-    object-fit: cover;
-    border-radius: 12px;
-    opacity: .55;
-    transition: .2s;
-}
+.tp-prev { left:15px; }
+.tp-next { right:15px; }
 
-.preview-thumbs img.active {
-    opacity: 1;
-    transform: scale(1.1);
-    border: 2px solid #22c55e;
-}
-
-.preview-thumbs img:hover {
-    opacity: 1;
+/* Close Btn */
+.tp-close {
+    position:absolute;
+    top:15px;
+    right:15px;
+    width:40px;
+    height:40px;
+    background:white;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 2px 10px rgba(0,0,0,0.25);
+    cursor:pointer;
+    font-size:20px;
 }
 </style>
+
+
+
 
 
 
@@ -758,51 +774,81 @@
     </div>
 </footer>
 
-<!-- ===================== MODAL PREVIEW — FULL MODERN VERSION ===================== -->
+<!-- ===================== MODAL PREVIEW ===================== -->
 <div 
     x-show="showPreview"
-    x-transition.opacity.duration.200ms
-    :class="darkMode 
-    ? 'bg-black/80' 
-    : 'bg-black/40'"
-    class="fixed inset-0 z-[9999] flex items-center justify-center p-4 backdrop-blur-lg"
+    x-transition
+    class="fixed inset-0 z-[9999] flex items-center justify-center p-4 tp-overlay"
     x-cloak
     @click.self="closePreview()"
-    @keydown.window.escape="closePreview()"
-    @keydown.window.arrowright.prevent="showNextImage()"
-    @keydown.window.arrowleft.prevent="showPrevImage()"
 >
 
-    <!-- CLOSE BUTTON -->
-    <button
-        @click="closePreview()"
-        :class="darkMode 
-    ? 'bg-white/10 border-white/20 text-white' 
-    : 'bg-black/10 border-black/20 text-black'"
-class="modal-close-btn absolute top-6 right-6 flex items-center justify-center rounded-full shadow-lg"
-    >
-        ✕
-    </button>
+    <!-- CLOSE -->
+    <div class="tp-close" @click="closePreview()">✕</div>
 
+    <!-- MODAL BOX -->
+    <div class="tp-modal grid grid-cols-1 md:grid-cols-2">
 
-    <!-- MAIN CONTENT -->
-    <div class="relative flex flex-col items-center w-full max-w-5xl">
-
-        <!-- TITLE DESKTOP -->
-        <div class="hidden md:flex mb-4">
-            <div class="px-5 py-2 bg-black/40 backdrop-blur-xl border border-white/10 shadow-lg rounded-full text-white text-lg font-medium">
-                <span x-text="previewName"></span>
-            </div>
+        <!-- LEFT IMAGE -->
+        <div class="tp-image-box">
+            <img 
+                :src="previewImage"
+                :style="`transform: translate(${panX}px,${panY}px) scale(${zoom})`"
+                draggable="false"
+            >
         </div>
+
+        <!-- RIGHT INFO -->
+        <div class="tp-info">
+            <h3 class="tp-kategori" x-text="previewCategory"></h3>
+            <h2 class="tp-title" x-text="previewName"></h2>
+            <div class="tp-price" x-text="previewPrice"></div>
+
+            <div class="tp-info-list">
+                <div class="tp-info-row">
+                    <span>ID Produk</span> 
+                    <span x-text="previewId"></span>
+                </div>
+                <div class="tp-info-row">
+                    <span>Stok</span>
+                    <span x-text="previewStock"></span>
+                </div>
+                <div class="tp-info-row">
+                    <span>Tanggal Upload</span>
+                    <span x-text="previewDate"></span>
+                </div>
+            </div>
+
+            <!-- THUMBNAILS -->
+            <div class="tp-thumbs mt-4">
+                <template x-for="(it,i) in previewItems" :key="i">
+                    <img 
+                        :src="it.image"
+                        @click="jumpToImage(i)"
+                        :class="currentIndex === i ? 'active':''"
+                    >
+                </template>
+            </div>
+
+        </div>
+
+        <!-- NAV BUTTONS -->
+        <div class="tp-nav-btn tp-prev hidden md:flex" @click="showPrevImage()">‹</div>
+        <div class="tp-nav-btn tp-next hidden md:flex" @click="showNextImage()">›</div>
+
+    </div>
+
+</div>
+
+
+
 
 
         <!-- IMAGE WRAPPER -->
         <div 
-  class="preview-wrapper"
-  :class="darkMode 
-      ? 'bg-white/5 border-white/10' 
-      : 'bg-black/5 border-black/20'"
->
+          class="preview-wrapper"
+          :class="darkMode ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/20'"
+        >
             <img 
                 :src="previewImage"
                 class="preview-img"
@@ -812,6 +858,37 @@ class="modal-close-btn absolute top-6 right-6 flex items-center justify-center r
                 `"
             >
         </div>
+
+        <!-- PRODUCT INFO – TOKOPEDIA STYLE -->
+<div 
+    class="modal-product-card"
+    :class="darkMode ? 'dark' : ''"
+>
+    <div class="modal-info-row">
+        <span class="modal-info-label">Nama Produk</span>
+        <span x-text="previewName"></span>
+    </div>
+
+    <div class="modal-info-row">
+        <span class="modal-info-label">ID Produk</span>
+        <span x-text="previewItems[currentIndex]?.id ?? '-'"></span>
+    </div>
+
+    <div class="modal-info-row">
+        <span class="modal-info-label">Tanggal Upload</span>
+        <span x-text="previewItems[currentIndex]?.created_at ?? '-'"></span>
+    </div>
+
+    <div class="modal-info-row">
+        <span class="modal-info-label">Stok</span>
+        <span x-text="previewItems[currentIndex]?.stock"></span>
+    </div>
+
+    <div class="modal-info-row">
+        <span class="modal-info-label">Harga</span>
+        <span class="modal-price" x-text="previewItems[currentIndex]?.price"></span>
+    </div>
+</div>
 
 
         <!-- NAVIGATION DESKTOP -->
@@ -852,8 +929,8 @@ class="hidden md:flex modal-nav-btn absolute left-8 top-1/2 -translate-y-1/2 rou
                 <img 
                     :src="it.image"
                     @click="jumpToImage(i)"
-                    class="w-16 h-16 object-cover cursor-pointer select-none"
-                    :class="currentIndex === i ? 'active' : ''"
+                    class="w-16 h-16 object-cover cursor-pointer select-none rounded-md border"
+                    :class="currentIndex === i ? 'border-green-500 shadow-md' : 'border-gray-300'"
                 >
             </template>
         </div>
@@ -877,7 +954,12 @@ function winoApp(){
     previewItems: [], // array of product objects for the preview (same shape as catalog elements)
     currentIndex: 0,
     previewImage: null,
+    previewCategory: "",
     previewName: "",
+    previewPrice: "",
+    previewStock: "",
+    previewId: "",
+    previewDate: "",
 
     // zoom & pan
     zoom: 1,
@@ -905,11 +987,13 @@ function winoApp(){
 
       // map products (from $products)
       this.catalog = (window.productsFromDB || []).map(p => ({
-        name: p.name,
-        category: p.category, // category is string per your model
-        price: "Rp " + Number(p.price).toLocaleString("id-ID"),
-        stock: p.stock,
-        image: p.image ? (p.image.startsWith('/') ? p.image : '/' + p.image) : "https://via.placeholder.com/400"
+          id: p.id,
+          name: p.name,
+          category: p.category,
+          price: "Rp " + Number(p.price).toLocaleString("id-ID"),
+          stock: p.stock,
+          date: p.created_at ? new Date(p.created_at).toLocaleDateString("id-ID") : "-",
+          image: p.image ? (p.image.startsWith('/') ? p.image : '/' + p.image) : "https://via.placeholder.com/400"
       }));
 
       // autoplay ads if desired
@@ -1000,8 +1084,9 @@ function winoApp(){
     // Open preview by image URL:
 openPreview(img){
     const clicked = this.catalog.find(p => p.image === img);
+
     if (!clicked) {
-        this.previewItems = [{ name: 'Gambar', image: img }];
+        this.previewItems = [{ name: 'Gambar', image: img, price: '-', stock: '-', id: '-', date: '-' }];
         this.currentIndex = 0;
     } else {
         this.previewItems = this.catalog.filter(p => p.category === clicked.category);
@@ -1009,8 +1094,16 @@ openPreview(img){
         if (this.currentIndex === -1) this.currentIndex = 0;
     }
 
-    this.previewImage = this.previewItems[this.currentIndex].image;
-    this.previewName = this.previewItems[this.currentIndex].name || "";
+    const item = this.previewItems[this.currentIndex];
+
+    this.previewImage = item.image;
+    this.previewCategory = item.category;
+    this.previewName  = item.name || "";
+    this.previewPrice = item.price || "-";
+    this.previewStock = item.stock || "-";
+    this.previewId    = item.id || "-";
+    this.previewDate  = item.date || "-";
+
     this.showPreview = true;
 
     this.resetZoomPan();
@@ -1018,11 +1111,9 @@ openPreview(img){
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
 
-    // 🔥 Tambahkan baris ini
-    this.$nextTick(() => {
-        this.attachZoomEvents();
-    });
+    this.$nextTick(() => this.attachZoomEvents());
 },
+
 
 
     /* =============================
