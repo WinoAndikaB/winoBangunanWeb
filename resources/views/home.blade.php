@@ -762,7 +762,10 @@
 <div 
     x-show="showPreview"
     x-transition.opacity.duration.200ms
-    class="fixed inset-0 z-[9999] preview-overlay flex items-center justify-center p-4"
+    :class="darkMode 
+    ? 'bg-black/80' 
+    : 'bg-black/40'"
+    class="fixed inset-0 z-[9999] flex items-center justify-center p-4 backdrop-blur-lg"
     x-cloak
     @click.self="closePreview()"
     @keydown.window.escape="closePreview()"
@@ -773,7 +776,10 @@
     <!-- CLOSE BUTTON -->
     <button
         @click="closePreview()"
-        class="modal-close-btn absolute top-6 right-6 flex items-center justify-center rounded-full shadow-lg text-white"
+        :class="darkMode 
+    ? 'bg-white/10 border-white/20 text-white' 
+    : 'bg-black/10 border-black/20 text-black'"
+class="modal-close-btn absolute top-6 right-6 flex items-center justify-center rounded-full shadow-lg"
     >
         ✕
     </button>
@@ -791,7 +797,12 @@
 
 
         <!-- IMAGE WRAPPER -->
-        <div class="preview-wrapper">
+        <div 
+  class="preview-wrapper"
+  :class="darkMode 
+      ? 'bg-white/5 border-white/10' 
+      : 'bg-black/5 border-black/20'"
+>
             <img 
                 :src="previewImage"
                 class="preview-img"
@@ -806,7 +817,11 @@
         <!-- NAVIGATION DESKTOP -->
         <button 
             @click="showPrevImage()"
-            class="hidden md:flex modal-nav-btn absolute left-8 top-1/2 -translate-y-1/2 rounded-full text-white items-center justify-center shadow-md"
+            :class="darkMode 
+    ? 'bg-white/10 border-white/20 text-white' 
+    : 'bg-black/10 border-black/20 text-black'"
+class="hidden md:flex modal-nav-btn absolute left-8 top-1/2 -translate-y-1/2 rounded-full items-center justify-center shadow-md"
+
         >
             ‹
         </button>
