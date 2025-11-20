@@ -259,6 +259,11 @@
      :class="darkMode ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-100'">
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div id="navbar-kategori"
+      class="flex items-center gap-6 py-3 overflow-x-auto scrollbar-hide text-sm cursor-grab select-none whitespace-nowrap">
+
+       
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-center gap-6 py-3 overflow-x-auto scrollbar-hide text-sm">
 
       <template x-for="(cat, i) in categories" :key="cat.key">
@@ -1221,6 +1226,42 @@ attachZoomEvents() {
 <script>
 window.productsFromDB = @json($products);
 window.categoriesFromDB = @json($categories);
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const slider = document.getElementById("navbar-kategori");
+    if (!slider) return;
+
+    let isDown = false;
+    let startX = 0;
+    let scrollStart = 0;
+
+    slider.addEventListener("mousedown", (e) => {
+        isDown = true;
+        slider.classList.add("cursor-grabbing");
+        startX = e.pageX;
+        scrollStart = slider.scrollLeft;
+    });
+
+    slider.addEventListener("mouseup", () => {
+        isDown = false;
+        slider.classList.remove("cursor-grabbing");
+    });
+
+    slider.addEventListener("mouseleave", () => {
+        isDown = false;
+        slider.classList.remove("cursor-grabbing");
+    });
+
+    slider.addEventListener("mousemove", (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+
+        const movement = startX - e.pageX;
+        slider.scrollLeft = scrollStart + movement;
+    });
+});
 </script>
 
 </body>
