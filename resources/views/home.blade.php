@@ -457,7 +457,8 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
           <!-- Input -->
           <input 
             type="search" 
-            x-model="search"
+            x-model="searchInput"
+            @keydown.enter.prevent="handleSearch()"
             placeholder="Cari produk..."
             class="w-full rounded-full border shadow-sm py-2.5 pl-12 pr-4 text-sm transition
                   focus:ring-2 focus:ring-green-500/40 focus:border-green-500
@@ -583,82 +584,138 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
 <main class="w-full flex justify-center">
   <div class="max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-8">
 
-    <!-- ===================== BERANDA ===================== -->
-    <section x-show="page === 'beranda'" x-cloak class="space-y-12">
+<!-- ===================== BERANDA ===================== -->
+<section x-show="page === 'beranda'" x-cloak class="space-y-12">
+  <!-- Hero Slider -->
+  <div class="relative w-full overflow-hidden rounded-2xl shadow-md">
+      <img 
+          src="{{ asset('images/banners.png') }}"
+          class="w-full object-cover max-h-[45vh] md:max-h-[55vh] lg:max-h-[60vh]"
+          alt="Hero Banner"
+      >
+  </div>
 
-<!-- Hero Slider -->
-<div class="relative w-full overflow-hidden rounded-2xl shadow-md">
-    <img 
-        src="{{ asset('images/banners.png') }}"
-        class="w-full object-cover max-h-[45vh] md:max-h-[55vh] lg:max-h-[60vh]"
-        alt="Hero Banner"
-    >
-</div>
+  <!-- ✅ CAROUSEL SEMUA PRODUK BERANDA -->
+  <template x-for="cat in allCategories" :key="cat.id">
 
-      <!-- Category Sections + CAROUSEL -->
-      <template x-for="cat in allCategories" :key="cat.id">
-        <section class="space-y-4">
+    <section class="space-y-4">
 
-          <div class="flex justify-between items-center">
-            <h2 class="text-xl font-semibold text-green-600" x-text="cat.idLabel"></h2>
-            <button @click="handleCategoryNavigation(cat.idLabel)"
-                    class="text-sm text-gray-500 hover:text-green-600">Lihat semua</button>
-          </div>
+      <div class="flex justify-between items-center">
+        <h2 class="text-xl font-semibold text-green-600" x-text="cat.idLabel"></h2>
+        <button @click="handleCategoryNavigation(cat.idLabel)"
+                class="text-sm text-gray-500 hover:text-green-600">
+          Lihat semua
+        </button>
+      </div>
 
-          <!-- Empty -->
-          <div x-show="filteredCatalogByCategory(cat.id).length === 0"
-               class="py-10 text-center text-gray-400">Data Kosong</div>
+      <div x-show="filteredCatalogByCategory(cat.id).length === 0"
+           class="py-10 text-center text-gray-400">
+        Data Kosong
+      </div>
 
-          <!-- Carousel -->
-          <div x-show="filteredCatalogByCategory(cat.id).length > 0"
-               class="relative group">
+      <div x-show="filteredCatalogByCategory(cat.id).length > 0"
+           class="relative group">
 
-            <!-- Left Button -->
-            <button @click="scrollCarousel(cat.id, 'left')"
-                    class="absolute left-0 top-1/2 -translate-y-1/2 p-2 rounded-full shadow 
-                          opacity-0 group-hover:opacity-100 transition z-10 pointer-events-auto"
-                    :class="darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor"><path d="M15 18l-6-6 6-6"/></svg>
-            </button>
+        <!-- LEFT BUTTON -->
+        <button @click="scrollCarousel(cat.id, 'left')"
+          class="absolute left-0 top-1/2 -translate-y-1/2 p-2 rounded-full shadow z-10"
+          :class="darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'">‹
+        </button>
 
-            <!-- The Scroll Container -->
-            <div :id="'carousel-' + cat.id"
-                 class="flex gap-4 overflow-x-auto scroll-smooth px-2 py-2 scrollbar-hide snap-x snap-mandatory">
+        <!-- CONTAINER -->
+        <div :id="'carousel-' + cat.id"
+             class="flex gap-4 overflow-x-auto scroll-smooth px-2 py-2 scrollbar-hide snap-x snap-mandatory">
 
-              <template x-for="item in filteredCatalogByCategory(cat.id)" :key="item.name">
-                <article class="w-56 snap-start flex-shrink-0 rounded-xl border shadow-sm"
-                         :class="darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white'">
+          <template x-for="item in filteredCatalogByCategory(cat.id)" :key="item.id">
+            <article class="w-56 snap-start flex-shrink-0 rounded-xl border shadow-sm"
+                     :class="darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white'">
 
-                  <div class="h-40 overflow-hidden rounded-t-xl">
-                    <img :src="item.image" :alt="item.name"
-                         @click="openPreview(item.image)"
-                         class="w-full h-full object-cover transition hover:scale-105 duration-500 cursor-pointer">
-                  </div>
+              <div class="h-40 overflow-hidden rounded-t-xl">
+                <img :src="item.image" 
+                     @click="openPreview(item.image)"
+                     class="w-full h-full object-cover cursor-pointer">
+              </div>
 
-                  <div class="p-3 space-y-1">
-                    <h3 class="text-sm font-medium truncate" x-text="item.name"></h3>
-                    <p class="text-green-600 font-semibold text-sm" x-text="item.price"></p>
-                    <p class="text-xs text-gray-400">Stok: <span x-text="item.stock"></span></p>
-                  </div>
+              <div class="p-3 space-y-1">
+                <h3 class="text-sm font-medium truncate" x-text="item.name"></h3>
+                <p class="text-green-600 font-semibold text-sm" x-text="item.price"></p>
+                <p class="text-xs text-gray-400">Stok: <span x-text="item.stock"></span></p>
+              </div>
+            </article>
+          </template>
 
-                </article>
-              </template>
+        </div>
 
-            </div>
+        <!-- RIGHT BUTTON -->
+        <button @click="scrollCarousel(cat.id, 'right')"
+          class="absolute right-0 top-1/2 -translate-y-1/2 p-2 rounded-full shadow z-10"
+          :class="darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'">›
+        </button>
 
-            <!-- Right Button -->
-            <button @click="scrollCarousel(cat.id, 'right')"
-                    class="absolute right-0 top-1/2 -translate-y-1/2 p-2 rounded-full shadow 
-                          opacity-0 group-hover:opacity-100 transition z-10 pointer-events-auto"
-                    :class="darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor"><path d="M9 18l6-6-6-6"/></svg>
-            </button>
+      </div>
 
-          </div>
-
-        </section>
-      </template>
     </section>
+
+  </template>
+
+</section>
+
+<!-- ===================== HALAMAN SEARCH ===================== -->
+<section x-show="page === 'search'" x-cloak class="space-y-8">
+
+  <div class="flex justify-between items-center">
+    <h2 class="text-2xl font-semibold text-green-600">
+      Hasil Pencarian: "<span x-text="searchQuery"></span>"
+    </h2>
+
+    <button 
+      @click="handleBackToHome()"
+      class="text-sm px-4 py-2 border rounded-full hover:bg-green-50"
+      :class="darkMode ? 'bg-gray-800 border-gray-700 hover:bg-gray-700' : ''">
+      Kembali
+    </button>
+  </div>
+
+  <!-- Jika tidak ada hasil -->
+  <div x-show="filteredGlobalSearch().length === 0" 
+       class="py-12 text-center text-gray-400">
+    Produk tidak ditemukan
+  </div>
+
+  <!-- Jika ada hasil -->
+  <div x-show="filteredGlobalSearch().length > 0"
+       class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+
+    <template x-for="item in filteredGlobalSearch()" :key="item.id">
+
+      <article class="border rounded-lg p-3 hover:shadow-md transition"
+               :class="darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white'">
+
+        <div class="h-40 overflow-hidden rounded-md">
+          <img 
+            :src="item.image" 
+            :alt="item.name"
+            @click="openPreview(item.image)"
+            class="w-full h-full object-cover cursor-pointer"
+          >
+        </div>
+
+        <h3 class="text-sm font-medium truncate mt-3" x-text="item.name"></h3>
+
+        <p class="text-green-600 font-semibold" x-text="item.price"></p>
+
+        <p class="text-xs text-gray-400">
+          Stok: <span x-text="item.stock"></span>
+        </p>
+
+      </article>
+
+    </template>
+
+  </div>
+
+</section>
+
 
     <!-- ===================== HALAMAN KATEGORI ===================== -->
     <section x-show="page === 'kategori'" x-cloak class="space-y-10">
@@ -1341,7 +1398,8 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
 function winoApp(){
   return {
     page: 'beranda',
-    search: '',
+    searchInput: '',
+    searchQuery: '', 
     darkMode: false,
     mobileMenu: false,
     currentAd: 0,
@@ -1413,12 +1471,20 @@ function winoApp(){
       // close mobile menu on page change
       this.$watch("page", () => this.mobileMenu = false);
 
-      this.$watch("search", () => {
-  if (this.page !== 'beranda' && this.page !== 'kategori') {
-    const catObj = this.allCategories.find(c => c.idLabel === this.page);
-    if (catObj) this.resetPagination(catObj.id);
-  }
+      this.$watch("searchInput", () => {
+        if (this.page !== 'beranda' && this.page !== 'kategori') {
+          const catObj = this.allCategories.find(c => c.idLabel === this.page);
+          if (catObj) this.resetPagination(catObj.id);
+        }
+      });
+
+      this.$watch("page", (newPage) => {
+    if (newPage !== "search") {
+        this.searchInput = "";
+        this.searchQuery = "";
+    }
 });
+
 
       // keyboard navigation for preview
       window.addEventListener('keydown', (e) => {
@@ -1462,6 +1528,11 @@ function winoApp(){
 
     handleBackToHome(){
       this.page = "beranda";
+
+      // ✅ Reset search otomatis saat kembali
+      this.searchInput = "";
+      this.searchQuery = "";
+
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
 
@@ -1474,7 +1545,7 @@ function winoApp(){
       const cat = this.allCategories.find(c => c.id === catId);
       if (!cat) return [];
 
-      const q = this.search.toLowerCase();
+      const q = this.searchQuery.toLowerCase();
 
       return this.catalog.filter(i =>
         i.category === cat.idLabel &&
@@ -1789,6 +1860,42 @@ resetPagination(catId){
         this.startX = 0;
         this.startY = 0;
     },
+
+filteredGlobalSearch() {
+    const q = this.searchQuery.toLowerCase();   // ✅ FIX
+
+    if (!q) return [];
+
+    return this.catalog.filter(item =>
+        item.name.toLowerCase().includes(q)
+    );
+},
+
+handleSearch() {
+    const q = this.searchInput.trim();
+
+    if (!q) return;
+
+    // ✅ baru simpan ke searchQuery saat tekan ENTER
+    this.searchQuery = q;
+
+    const isCategoryPage = this.allCategories.some(cat => cat.idLabel === this.page);
+
+    if (this.page === 'beranda') {
+        this.page = 'search';
+    } 
+    else if (isCategoryPage) {
+        const catObj = this.allCategories.find(c => c.idLabel === this.page);
+        if (catObj) this.resetPagination(catObj.id);
+    } 
+    else {
+        this.page = 'search';
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+},
+
+
 
     // =============================
     // AUTO SCROLL THUMBNAIL ACTIVE
