@@ -93,27 +93,38 @@
 }
 
 /* ========= THUMBNAIL BAR ========= */
-.tp-thumbs {
-    display:flex;
-    gap:10px;
-    overflow-x:auto;
-    padding:12px;
+.tp-thumbs img {
+    transition: 
+        transform .25s ease,
+        opacity .25s ease,
+        box-shadow .25s ease,
+        border .25s ease;
 }
-.tp-thumbs img{
-    width:62px;
-    height:62px;
-    border-radius:8px;
-    object-fit:cover;
-    border:2px solid transparent;
-    cursor:pointer;
-    opacity:.7;
-    transition:.2s;
+
+.tp-thumbs img:hover {
+    transform: scale(1.08) translateY(-2px);
 }
-.tp-thumbs img:hover,
+
 .tp-thumbs img.active {
-    opacity:1;
-    border-color:#03ac0e;
+    transform: scale(1.12);
+    border-color: #03ac0e !important;
+    box-shadow: 
+        0 0 0 2px rgba(3,172,14,0.3),
+        0 8px 16px rgba(0,0,0,0.25);
+    opacity: 1;
 }
+
+/* Animasi kecil saat aktif berpindah */
+@keyframes thumbPop {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.18); }
+    100% { transform: scale(1.12); }
+}
+
+.tp-thumbs img.thumb-animate {
+    animation: thumbPop .2s ease;
+}
+
 
 /* ========= NAV BUTTONS ========= */
 .tp-nav-btn {
@@ -391,6 +402,25 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
     z-index: 20;
 }
 
+/* Animasi gambar utama */
+.tp-main-image {
+    transition: transform .25s ease, opacity .25s ease;
+}
+
+.tp-main-image.fade-out-left {
+    transform: translateX(-40px) scale(0.95);
+    opacity: 0;
+}
+
+.tp-main-image.fade-out-right {
+    transform: translateX(40px) scale(0.95);
+    opacity: 0;
+}
+
+.tp-main-image.fade-in {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+}
 
 
 </style>
@@ -1574,41 +1604,58 @@ stopHoverZoom() {
     },
 
     showNextImage(){
-        if (!this.previewItems.length) return;
+        const img = document.querySelector(".tp-main-image");
+        if (img) img.classList.add("fade-out-left");
 
-        this.currentIndex = (this.currentIndex + 1) % this.previewItems.length;
+        setTimeout(() => {
+            this.currentIndex = (this.currentIndex + 1) % this.previewItems.length;
+            const item = this.previewItems[this.currentIndex];
 
-        const item = this.previewItems[this.currentIndex];
+            this.previewImage = item.image;
+            this.previewName = item.name || "";
+            this.previewPrice = item.price || "-";
+            this.previewStock = item.stock || "-";
+            this.previewId = item.id || "-";
+            this.previewDate = item.date || "-";
+            this.previewCategory = item.category || "-";
 
-        this.previewImage  = item.image;
-        this.previewName   = item.name || "";
-        this.previewPrice  = item.price || "-";
-        this.previewStock  = item.stock || "-";
-        this.previewId     = item.id || "-";
-        this.previewDate   = item.date || "-";
-        this.previewCategory = item.category || "-";
+            if (img) {
+                img.classList.remove("fade-out-left");
+                img.classList.add("fade-in");
+                setTimeout(() => img.classList.remove("fade-in"), 200);
+            }
 
-        this.resetZoomPan();
-        this.$nextTick(() => this.scrollThumbnailIntoView());
+            this.resetZoomPan();
+            this.$nextTick(() => this.scrollThumbnailIntoView());
+        }, 150);
     },
 
+
     showPrevImage(){
-        if (!this.previewItems.length) return;
+        const img = document.querySelector(".tp-main-image");
+        if (img) img.classList.add("fade-out-right");
 
-        this.currentIndex = (this.currentIndex - 1 + this.previewItems.length) % this.previewItems.length;
+        setTimeout(() => {
+            this.currentIndex = (this.currentIndex - 1 + this.previewItems.length) % this.previewItems.length;
+            const item = this.previewItems[this.currentIndex];
 
-        const item = this.previewItems[this.currentIndex];
+            this.previewImage = item.image;
+            this.previewName = item.name || "";
+            this.previewPrice = item.price || "-";
+            this.previewStock = item.stock || "-";
+            this.previewId = item.id || "-";
+            this.previewDate = item.date || "-";
+            this.previewCategory = item.category || "-";
 
-        this.previewImage  = item.image;
-        this.previewName   = item.name || "";
-        this.previewPrice  = item.price || "-";
-        this.previewStock  = item.stock || "-";
-        this.previewId     = item.id || "-";
-        this.previewDate   = item.date || "-";
-        this.previewCategory = item.category || "-";
+            if (img) {
+                img.classList.remove("fade-out-right");
+                img.classList.add("fade-in");
+                setTimeout(() => img.classList.remove("fade-in"), 200);
+            }
 
-        this.resetZoomPan();
-        this.$nextTick(() => this.scrollThumbnailIntoView());
+            this.resetZoomPan();
+            this.$nextTick(() => this.scrollThumbnailIntoView());
+        }, 150);
     },
 
     jumpToImage(i){
@@ -1650,6 +1697,10 @@ stopHoverZoom() {
         const activeThumb = thumbs[this.currentIndex];
         if (!activeThumb) return;
 
+        thumbs.forEach(t => t.classList.remove("thumb-animate"));
+
+        activeThumb.classList.add("thumb-animate");
+
         const containerRect = container.getBoundingClientRect();
         const thumbRect = activeThumb.getBoundingClientRect();
 
@@ -1661,6 +1712,10 @@ stopHoverZoom() {
             left: offset,
             behavior: "smooth"
         });
+
+        setTimeout(() => {
+            activeThumb.classList.remove("thumb-animate");
+        }, 200);
     },
 
   }
