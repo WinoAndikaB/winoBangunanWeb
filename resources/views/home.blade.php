@@ -1575,41 +1575,77 @@ function winoApp(){
        ------------------- */
 
     // Open preview by image URL:
-openPreview(img){
-    const clicked = this.catalog.find(p => p.image === img);
+    openPreview(img){
+        const clicked = this.catalog.find(p => p.image === img);
 
-    if (!clicked) {
-        this.previewItems = [{ name: 'Gambar', image: img, price: '-', stock: '-', id: '-', date: '-' }];
-        this.currentIndex = 0;
-    } else {
-        this.previewItems = this.catalog.filter(p => p.category === clicked.category);
-        this.currentIndex = this.previewItems.findIndex(p => p.image === img);
-        if (this.currentIndex === -1) this.currentIndex = 0;
-    }
+        if (!clicked) {
+            this.previewItems = [{
+                name: 'Gambar',
+                image: img,
+                price: '-',
+                stock: '-',
+                id: '-',
+                date: '-',
+                category: '-'
+            }];
+            this.currentIndex = 0;
+        } 
+        else {
 
-    const item = this.previewItems[this.currentIndex];
+            // ✅ JIKA SEDANG DI HALAMAN SEARCH
+            if (this.page === "search") {
 
-    this.previewImage = item.image;
-    this.previewCategory = item.category;
-    this.previewName  = item.name || "";
-    this.previewPrice = item.price || "-";
-    this.previewStock = item.stock || "-";
-    this.previewId    = item.id || "-";
-    this.previewDate  = item.date || "-";
+                const q = this.searchQuery.toLowerCase();
 
-    this.showPreview = true;
+                // Ambil hanya hasil dari pencarian
+                const searchResults = this.catalog.filter(p =>
+                    p.name.toLowerCase().includes(q)
+                );
 
-    this.resetZoomPan();
+                // Kalau cuma ada 1 hasil → tampilkan 1 saja
+                if (searchResults.length === 1) {
+                    this.previewItems = searchResults;
+                    this.currentIndex = 0;
+                } 
+                else {
+                    // Kalau lebih dari 1 → tetap bisa next/prev di hasil search saja
+                    this.previewItems = searchResults;
+                    this.currentIndex = searchResults.findIndex(p => p.image === img);
 
-    document.documentElement.style.overflow = 'hidden';
-    document.body.style.overflow = 'hidden';
+                    if (this.currentIndex === -1) this.currentIndex = 0;
+                }
 
-    this.$nextTick(() => {
-        this.attachZoomEvents();
-        this.scrollThumbnailIntoView();  // ⬅️ Tambahkan ini
-    });
-},
+            } 
+            else {
+                // ✅ Kalau buka dari beranda / kategori → tetap per kategori
+                this.previewItems = this.catalog.filter(p => p.category === clicked.category);
+                this.currentIndex = this.previewItems.findIndex(p => p.image === img);
 
+                if (this.currentIndex === -1) this.currentIndex = 0;
+            }
+        }
+
+        const item = this.previewItems[this.currentIndex];
+
+        this.previewImage = item.image;
+        this.previewCategory = item.category || "-";
+        this.previewName  = item.name || "";
+        this.previewPrice = item.price || "-";
+        this.previewStock = item.stock || "-";
+        this.previewId    = item.id || "-";
+        this.previewDate  = item.date || "-";
+
+        this.showPreview = true;
+        this.resetZoomPan();
+
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+
+        this.$nextTick(() => {
+            this.attachZoomEvents();
+            this.scrollThumbnailIntoView();
+        });
+    },
 
 
     /* =============================
