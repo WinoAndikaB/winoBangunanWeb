@@ -369,6 +369,29 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
     background: #444;
 }
 
+.tp-image-box img {
+    transition: transform 0.15s ease, transform-origin 0.1s ease;
+    cursor: zoom-in;
+}
+.tp-image-box.zoom-active img {
+    cursor: zoom-out;
+}
+
+/* MAGNIFIER LENS */
+.magnifier-lens {
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    pointer-events: none;
+    border: 2px solid rgba(0,0,0,.2);
+    box-shadow: 0 8px 25px rgba(0,0,0,.25);
+    background-repeat: no-repeat;
+    display: none;
+    z-index: 20;
+}
+
+
 
 </style>
 </head>
@@ -1027,25 +1050,15 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
     @click.self="closePreview()"
     x-cloak>
 
-    <!-- LOGO MODAL -->
-<div class="absolute top-4 left-4 z-40">
-    <img 
-        src="{{ asset('images/lightmode-logo2.png') }}"
-        alt="Logo"
-        class="h-8 md:h-10 drop-shadow-sm select-none"
-        draggable="false"
-    >
-</div>
-
     <!-- MODAL WRAPPER -->
     <div 
         class="tp-modal relative grid grid-cols-1 md:grid-cols-2"
         :class="darkMode ? 'bg-gray-900 text-gray-100' : 'bg-white text-gray-900'"
     >
 
-    <!-- ✅ LOGO POJOK KANAN BAWAH CONTAINER MODAL -->
+    <!-- ✅ LOGO MODAL -->
     <div 
-        class="absolute bottom-4 right-4 z-40 
+        class="hidden md:flex absolute bottom-4 right-4 z-40 
               bg-white/80 backdrop-blur px-3 py-1.5 
               rounded-lg shadow-md"
         :class="darkMode ? 'bg-black/40' : 'bg-white/80'"
@@ -1079,15 +1092,35 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
                 :class="darkMode ? 'bg-gray-800' : 'bg-gray-100'"
             >
 
+                <!-- LOGO MOBILE (pojok kiri atas dalam gambar) -->
+                <div class="absolute top-3 left-3 z-30 md:hidden">
+                    <img 
+                        src="{{ asset('images/lightmode-logo2.png') }}"
+                        alt="Logo"
+                        class="h-7 drop-shadow-md select-none"
+                        draggable="false"
+                    >
+                </div>
+
                 <!-- GAMBAR PRODUK -->
                 <img 
-                    :src="previewImage"
-                    class="select-none"
-                    draggable="false"
-                    :style="`
-                        transform: translate(${panX}px, ${panY}px) scale(${zoom});
-                    `"
-                >
+                  :src="previewImage"
+                  class="select-none tp-main-image"
+                  draggable="false"
+                  @mouseenter="startHoverZoom($event)"
+                  @mousemove="handleMouseMove($event)"
+                  @mouseleave="stopHoverZoom()"
+                  :style="`
+                      transform: translate(${panX}px, ${panY}px) scale(${zoom});
+                      transform-origin: ${originX}% ${originY}%;
+                      transition: transform 0.15s ease;
+                  `"
+                />
+
+                <div 
+                  class="magnifier-lens"
+                  x-ref="magnifier"
+                ></div>
 
                 <!-- PREV BUTTON -->
                 <div 
@@ -1257,6 +1290,15 @@ function winoApp(){
     panY: 0,
     startX: 0,
     startY: 0,
+
+    originX: 50,
+    originY: 50,
+    hoverZoom: false,
+    targetOriginX: 50,
+    targetOriginY: 50,
+    smoothSpeed: 0.12,
+    frameRunning: false,
+
 
     ads: [
       "https://source.unsplash.com/1200x400/?construction",
@@ -1459,6 +1501,64 @@ attachZoomEvents() {
     });
 },
 
+// Aktif saat cursor masuk gambar utama
+startHoverZoom(e) {
+    this.hoverZoom = true;
+    this.zoom = 2;
+
+    const box = e.target.closest(".tp-image-box");
+    if (box) box.classList.add("zoom-active");
+},
+
+// Saat mouse bergerak di gambar utama
+handleMouseMove(e) {
+    if (!this.hoverZoom) return;
+
+    const rect = e.target.getBoundingClientRect();
+
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+    this.targetOriginX = Math.min(100, Math.max(0, x));
+    this.targetOriginY = Math.min(100, Math.max(0, y));
+
+    if (!this.frameRunning) {
+        this.frameRunning = true;
+        this.animateZoom();
+    }
+},
+
+animateZoom() {
+    this.originX += (this.targetOriginX - this.originX) * 0.06;
+    this.originY += (this.targetOriginY - this.originY) * 0.06;
+
+    if (
+        Math.abs(this.originX - this.targetOriginX) < 0.05 &&
+        Math.abs(this.originY - this.targetOriginY) < 0.05
+    ) {
+        this.frameRunning = false;
+        return;
+    }
+
+    requestAnimationFrame(() => this.animateZoom());
+},
+
+// Saat cursor keluar gambar utama
+stopHoverZoom() {
+    this.hoverZoom = false;
+    this.zoom = 1;
+
+    this.targetOriginX = 50;
+    this.targetOriginY = 50;
+
+    if (!this.frameRunning) {
+        this.frameRunning = true;
+        this.animateZoom();
+    }
+
+    const box = document.querySelector(".tp-image-box");
+    if (box) box.classList.remove("zoom-active");
+},
 
     closePreview(){
       this.showPreview = false;
