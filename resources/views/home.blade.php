@@ -513,10 +513,10 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
 
         <!-- Item Menu -->
         <button @click="handleCategoryNavigation(cat.key)"
-        class="w-full text-left px-3 py-2 rounded-lg transition-all"
-        :class="page === cat.key
-            ? 'bg-orange-500 text-white shadow-md scale-[1.02]' 
-            : (darkMode ? 'hover:bg-white/10' : 'hover:bg-orange-50')"
+          class="w-full text-left px-3 py-2 rounded-lg transition-all"
+          :class="page === cat.key
+              ? 'bg-orange-500 text-white shadow-md scale-[1.02]' 
+              : (darkMode ? 'hover:bg-white/10' : 'hover:bg-orange-50')">
           <span x-text="cat.label"></span>
         </button>
 
@@ -676,12 +676,11 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
 
         <template x-for="cat in allCategories" :key="cat.id">
           <div @click="handleCategoryNavigation(cat.idLabel)"
-               class="p-6 border rounded-2xl shadow cursor-pointer transition-all duration-200"
-              :class="page === cat.idLabel
-                  ? 'bg-orange-500 text-white shadow-lg scale-[1.03]'
-                  : (darkMode ? 'bg-gray-800 border-gray-700 hover:bg-gray-700' : 'bg-white hover:bg-green-50')"
+            class="p-6 border rounded-2xl shadow cursor-pointer transition-all duration-200"
+            :class="page === cat.idLabel
+                ? 'bg-orange-500 text-white shadow-lg scale-[1.03]'
+                : (darkMode ? 'bg-gray-800 border-gray-700 hover:bg-gray-700' : 'bg-white hover:bg-green-50')">
 
-            
             <h3 class="text-lg font-semibold text-green-600" x-text="cat.idLabel"></h3>
             <p class="text-sm text-gray-500 mt-1">Klik untuk melihat produk</p>
 
@@ -694,7 +693,11 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
 
     <!-- ===================== KATEGORI DETAIL ===================== -->
     <template x-for="cat in allCategories" :key="cat.id">
-      <section x-show="page === cat.idLabel" x-cloak class="space-y-6">
+      <section 
+        x-show="page === cat.idLabel" 
+        x-cloak 
+        class="space-y-6"
+        :x-ref="'categorySection-' + cat.id">
 
         <div class="flex justify-between items-center">
           <h2 class="text-2xl font-semibold text-green-600" x-text="cat.idLabel"></h2>
@@ -709,23 +712,65 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
         <div x-show="filteredCatalogByCategory(cat.id).length === 0"
              class="py-10 text-center text-gray-400">Data Kosong</div>
 
-        <div x-show="filteredCatalogByCategory(cat.id).length > 0"
-             class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div x-show="filteredCatalogByCategory(cat.id).length > 0">
 
-          <template x-for="item in filteredCatalogByCategory(cat.id)" :key="item.name">
-            <article class="border rounded-lg p-3 hover:shadow-md transition"
-                     :class="darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white'">
+  <!-- GRID PRODUK -->
+  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <template x-for="item in paginatedItems(cat.id)" :key="item.name">
+      <article class="border rounded-lg p-3 hover:shadow-md transition"
+               :class="darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white'">
 
-              <img :src="item.image" :alt="item.name"
-                   @click="openPreview(item.image)"
-                   class="w-full h-40 object-cover rounded-md cursor-pointer" draggable="false">
+        <img :src="item.image" :alt="item.name"
+             @click="openPreview(item.image)"
+             class="w-full h-40 object-cover rounded-md cursor-pointer" draggable="false">
 
-              <h3 class="text-sm font-medium truncate mt-3" x-text="item.name"></h3>
-              <p class="text-green-600 font-semibold" x-text="item.price"></p>
-              <p class="text-xs text-gray-400">Stok: <span x-text="item.stock"></span></p>
+        <h3 class="text-sm font-medium truncate mt-3" x-text="item.name"></h3>
+        <p class="text-green-600 font-semibold" x-text="item.price"></p>
+        <p class="text-xs text-gray-400">
+          Stok: <span x-text="item.stock"></span>
+        </p>
 
-            </article>
-          </template>
+      </article>
+    </template>
+  </div>
+
+  <!-- PAGINATION -->
+  <div x-show="totalPages(cat.id) > 1"
+       class="flex justify-center mt-8 gap-2 items-center">
+
+    <!-- Prev -->
+    <button 
+        @click="goToPage(cat.id, (currentPages[cat.id] || 1) - 1)"
+        class="w-9 h-9 rounded-full shadow"
+        :class="darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'">
+        ‹
+    </button>
+
+    <!-- Pages -->
+    <template x-for="pageNumber in totalPages(cat.id)" :key="pageNumber">
+      <button 
+          @click="goToPage(cat.id, pageNumber)"
+          class="px-3 h-9 rounded-full text-sm font-medium transition-all"
+          :class="
+              (currentPages[cat.id] || 1) === pageNumber
+              ? 'bg-green-600 text-white scale-110'
+              : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-white text-gray-600 hover:bg-green-50')
+          "
+          x-text="pageNumber">
+      </button>
+    </template>
+
+    <!-- Next -->
+    <button 
+        @click="goToPage(cat.id, (currentPages[cat.id] || 1) + 1)"
+        class="w-9 h-9 rounded-full shadow"
+        :class="darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'">
+        ›
+    </button>
+
+  </div>
+
+</div>
 
         </div>
       </section>
@@ -1329,6 +1374,9 @@ function winoApp(){
     smoothSpeed: 0.12,
     frameRunning: false,
 
+    perPage: 8,
+    currentPages: {}, 
+
 
     ads: [
       "https://source.unsplash.com/1200x400/?construction",
@@ -1365,6 +1413,13 @@ function winoApp(){
       // close mobile menu on page change
       this.$watch("page", () => this.mobileMenu = false);
 
+      this.$watch("search", () => {
+  if (this.page !== 'beranda' && this.page !== 'kategori') {
+    const catObj = this.allCategories.find(c => c.idLabel === this.page);
+    if (catObj) this.resetPagination(catObj.id);
+  }
+});
+
       // keyboard navigation for preview
       window.addEventListener('keydown', (e) => {
         if (!this.showPreview) return;
@@ -1396,6 +1451,12 @@ function winoApp(){
 
     handleCategoryNavigation(catKey){
       this.page = catKey;
+
+      const catObj = this.allCategories.find(c => c.idLabel === catKey);
+      if(catObj){
+          this.resetPagination(catObj.id);
+      }
+
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
 
@@ -1589,6 +1650,49 @@ stopHoverZoom() {
     const box = document.querySelector(".tp-image-box");
     if (box) box.classList.remove("zoom-active");
 },
+
+// ambil data per halaman
+paginatedItems(catId) {
+    const all = this.filteredCatalogByCategory(catId);
+    const page = this.currentPages[catId] || 1;
+    const start = (page - 1) * this.perPage;
+    return all.slice(start, start + this.perPage);
+},
+
+// hitung total halaman
+totalPages(catId) {
+    const total = this.filteredCatalogByCategory(catId).length;
+    return total > 0 ? Math.ceil(total / this.perPage) : 1;
+},
+
+
+// pindah halaman
+goToPage(catId, page) {
+    if (page < 1 || page > this.totalPages(catId)) return;
+
+    this.currentPages[catId] = page;
+
+    this.$nextTick(() => {
+        const section = this.$refs["categorySection-" + catId];
+        
+        if (section) {
+            const rect = section.getBoundingClientRect();
+            const scrollY = window.scrollY + rect.top - (window.innerHeight / 3);
+
+            window.scrollTo({
+                top: scrollY,
+                behavior: "smooth"
+            });
+        }
+    });
+},
+
+
+// reset tiap pindah kategori
+resetPagination(catId){
+    this.currentPages[catId] = 1;
+},
+
 
     closePreview(){
       this.showPreview = false;
