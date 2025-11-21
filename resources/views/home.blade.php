@@ -686,7 +686,7 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
   <div x-show="filteredGlobalSearch().length > 0"
        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
 
-    <template x-for="item in filteredGlobalSearch()" :key="item.id">
+    <template x-for="item in paginatedSearchResults()" :key="item.id">
 
       <article class="border rounded-lg p-3 hover:shadow-md transition"
                :class="darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white'">
@@ -715,6 +715,45 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
   </div>
 
 </section>
+
+<!-- ================= PAGINATION SEARCH ================= -->
+<div x-show="searchTotalPages() > 1"
+     class="flex justify-center mt-10 gap-2 items-center">
+
+  <!-- Prev -->
+  <button 
+    @click="goToSearchPage(searchPage - 1)"
+    class="w-9 h-9 rounded-full shadow"
+    :class="darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'">
+    ‹
+  </button>
+
+  <!-- Page Numbers -->
+  <template x-for="p in searchTotalPages()" :key="p">
+    <button 
+      @click="goToSearchPage(p)"
+      class="px-3 h-9 rounded-full text-sm font-medium transition-all"
+      :class="
+        searchPage === p
+          ? 'bg-green-600 text-white scale-110'
+          : (darkMode 
+              ? 'bg-gray-800 text-gray-300' 
+              : 'bg-white text-gray-600 hover:bg-green-50')
+      "
+      x-text="p">
+    </button>
+  </template>
+
+  <!-- Next -->
+  <button 
+    @click="goToSearchPage(searchPage + 1)"
+    class="w-9 h-9 rounded-full shadow"
+    :class="darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'">
+    ›
+  </button>
+
+</div>
+
 
 
     <!-- ===================== HALAMAN KATEGORI ===================== -->
@@ -1400,6 +1439,8 @@ function winoApp(){
     page: 'beranda',
     searchInput: '',
     searchQuery: '', 
+    searchPage: 1,
+    searchPerPage: 8,
     darkMode: false,
     mobileMenu: false,
     currentAd: 0,
@@ -1898,7 +1939,7 @@ resetPagination(catId){
     },
 
 filteredGlobalSearch() {
-    const q = this.searchQuery.toLowerCase();   // ✅ FIX
+    const q = this.searchQuery.toLowerCase();
 
     if (!q) return [];
 
@@ -1912,8 +1953,11 @@ handleSearch() {
 
     if (!q) return;
 
-    // ✅ baru simpan ke searchQuery saat tekan ENTER
+    // ✅ simpan keyword
     this.searchQuery = q;
+
+    // ✅ reset search pagination
+    this.searchPage = 1;
 
     const isCategoryPage = this.allCategories.some(cat => cat.idLabel === this.page);
 
@@ -1930,6 +1974,25 @@ handleSearch() {
 
     window.scrollTo({ top: 0, behavior: "smooth" });
 },
+
+
+paginatedSearchResults() {
+    const all = this.filteredGlobalSearch();
+    const start = (this.searchPage - 1) * this.searchPerPage;
+    return all.slice(start, start + this.searchPerPage);
+},
+
+searchTotalPages() {
+    const total = this.filteredGlobalSearch().length;
+    return total > 0 ? Math.ceil(total / this.searchPerPage) : 1;
+},
+
+goToSearchPage(page) {
+    if (page < 1 || page > this.searchTotalPages()) return;
+    this.searchPage = page;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+},
+
 
 
 
