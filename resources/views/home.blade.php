@@ -1025,14 +1025,38 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
     class="fixed inset-0 z-[9999] flex items-center justify-center p-4 tp-overlay"
     :class="darkMode ? 'bg-black/70' : 'bg-black/40'"
     @click.self="closePreview()"
-    x-cloak
->
+    x-cloak>
+
+    <!-- LOGO MODAL -->
+<div class="absolute top-4 left-4 z-40">
+    <img 
+        src="{{ asset('images/lightmode-logo2.png') }}"
+        alt="Logo"
+        class="h-8 md:h-10 drop-shadow-sm select-none"
+        draggable="false"
+    >
+</div>
 
     <!-- MODAL WRAPPER -->
     <div 
         class="tp-modal relative grid grid-cols-1 md:grid-cols-2"
         :class="darkMode ? 'bg-gray-900 text-gray-100' : 'bg-white text-gray-900'"
     >
+
+    <!-- ✅ LOGO POJOK KANAN BAWAH CONTAINER MODAL -->
+    <div 
+        class="absolute bottom-4 right-4 z-40 
+              bg-white/80 backdrop-blur px-3 py-1.5 
+              rounded-lg shadow-md"
+        :class="darkMode ? 'bg-black/40' : 'bg-white/80'"
+    >
+        <img 
+            src="{{ asset('images/lightmode-logo2.png') }}"
+            alt="Logo"
+            class="h-7 md:h-9 select-none"
+            draggable="false"
+        >
+    </div>
 
         <!-- CLOSE BUTTON -->
         <button 
@@ -1054,6 +1078,8 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
                 class="tp-image-box w-full relative overflow-hidden rounded-xl"
                 :class="darkMode ? 'bg-gray-800' : 'bg-gray-100'"
             >
+
+                <!-- GAMBAR PRODUK -->
                 <img 
                     :src="previewImage"
                     class="select-none"
@@ -1063,7 +1089,7 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
                     `"
                 >
 
-                <!-- NAV BTN PREV -->
+                <!-- PREV BUTTON -->
                 <div 
                     class="tp-nav-btn tp-prev"
                     @click="showPrevImage()"
@@ -1072,7 +1098,7 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
                         : 'bg-white text-gray-800'"
                 >‹</div>
 
-                <!-- NAV BTN NEXT -->
+                <!-- NEXT BUTTON -->
                 <div 
                     class="tp-nav-btn tp-next"
                     @click="showNextImage()"
@@ -1080,7 +1106,9 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
                         ? 'bg-white/10 text-white' 
                         : 'bg-white text-gray-800'"
                 >›</div>
+
             </div>
+
 
             <!-- THUMB STRIP -->
             <div 
