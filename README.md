@@ -1,6 +1,4 @@
-<p align="center">
-  <img src="./images/lightmode-logo2.png" width="400" />
-</p>
+<img src="./images/lightmode-logo2.png" width="400" />
 
 ## Tentang Wino Bangunan
 
