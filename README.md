@@ -4,7 +4,7 @@
 
 ## Tentang Wino Bangunan
 
-Website ini merupakan company profile yang memperkenalkan peruusahaan untuk menjangkau pelanggan lebih luas
+Website ini merupakan company profile yang memperkenalkan perusahaan untuk menjangkau pelanggan lebih luas.
 
 ## Cara Menggunakan Website
 
@@ -23,8 +23,14 @@ Website ini merupakan company profile yang memperkenalkan peruusahaan untuk menj
 3. Visual Studio Code
 - Buka VSCode, kemudian buka *Terminal* pilih Bagian *Command Prompt (Jangan Powershell)*.
 - Ketik *Composer Install*.
-- Setelah itu, buat file baru *.env* dan pindahkan isi dari *.env.example* ke *.env*.
-- Buka lagi Teriminal, *php artisan migrate --seed*.
+- buka *XAMPP* dan jalankan *Apache & MySQL*.
+- Setelah itu, buat file baru *.env* dan pindahkan isi dari *.env.example* ke *.env* - Buka *.env* dan ganti nama *DB_DATABASE* pada *.env* menjadi *winobangunanweb*.
 - Setelah itu, ketikkan *php artisan key:generate*.
-- Lalu, buka *XAMPP* dan jalankan *Apache & MySQL*.
+- Kemudian, ketikkan *php artisan migrate*.
+- Jika terdapat notif *The database 'winobangunanweb' does not exist on the 'mysql' connection. Would you like to create it? (yes/no)* maka tulis [yes]
+- Setelah itu, ketikkan *php artisan db:seed --class=ProductSeeder* untuk memasukkan dummy data pada database
 - Kemudian, jalankan *php artisan serve*.
+
+4. Tampilan Mobile
+- Jika anda ingin tampilan dalam bentuk mobile, anda perlu melakukan install extensions dan cari *Mobile Preview*
+- Untuk menggunakan modal preview, pada keyboard, pencet tombol *CTRL+LSHIFT+P* dan pilih bagian *Mobile Preview: Show*
