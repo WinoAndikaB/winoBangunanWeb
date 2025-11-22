@@ -6,7 +6,7 @@
 
 Website ini merupakan company profile yang memperkenalkan peruusahaan untuk menjangkau pelanggan lebih luas
 
-### Cara Menggunakan Website
+## Cara Menggunakan Website
 
 1. Sebelum memulai langkah-langkahnya, siapkan kebutuhan software yaitu:
 
