@@ -1,4 +1,4 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="{{ asset('images/lightmode-logo2.png') }} width="400" alt="Laravel Logo"></a></p>
+<img src="{{ asset('images/lightmode-logo2.png') }}" width="400" alt="Laravel Logo">
 
 <p align="center">
 <a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
