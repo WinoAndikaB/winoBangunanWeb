@@ -1,4 +1,4 @@
-<img src="images/lightmode-logo2.png" width="400">
+<img src="public/images/lightmode-logo2.png" width="400">
 
 <p align="center">
 <a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
