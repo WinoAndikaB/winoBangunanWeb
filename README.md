@@ -1,4 +1,4 @@
-<img src="./images/lightmode-logo2.png" width="400" />
+<img src="https://drive.google.com/uc?export=view&id=1npw4HmwWEIWhJp5NJ0_MtpUUMye3pWHL" width="400" alt="Logo">
 
 ## Tentang Wino Bangunan
 
