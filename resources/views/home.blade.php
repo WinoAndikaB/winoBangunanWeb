@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  
+
   <title>Wino Bangunan - Toko Material Terlengkap di Towuti</title>
   <meta name="description" content="Wino Bangunan adalah toko bahan bangunan terlengkap di Towuti, Luwu Timur. Menyediakan semen, besi, cat, dan lainnya.">
   
@@ -606,6 +606,26 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
       >
   </div>
 
+  <div class="flex flex-wrap gap-3 mb-5 items-center">
+  <select 
+    x-model="filterStock"
+    class="px-3 py-2 rounded-lg border text-sm">
+    <option value="">Semua Stok</option>
+    <option value="ready">Ready</option>
+    <option value="limit">Terbatas</option>
+    <option value="empty">Habis</option>
+  </select>
+
+  <select 
+    x-model="filterPrice"
+    class="px-3 py-2 rounded-lg border text-sm">
+    <option value="">Urutkan Harga</option>
+    <option value="low">Termurah</option>
+    <option value="high">Termahal</option>
+  </select>
+</div>
+
+
   <!-- ✅ CAROUSEL SEMUA PRODUK BERANDA -->
   <template x-for="cat in allCategories" :key="cat.id">
 
@@ -724,53 +744,52 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
     </template>
 
   </div>
-
 </section>
 
 <!-- ================= PAGINATION SEARCH ================= -->
-  <div 
-    x-show="searchTotalPages() > 1"
-    class="mt-10 flex flex-col items-center gap-3">
+    <div 
+      x-show="page === 'search' && searchTotalPages() > 1"
+      class="mt-10 flex flex-col items-center gap-3"
+    >
 
-    <!-- Info halaman -->
-    <div class="text-xs opacity-70"
-        x-text="'Halaman ' + searchPage + ' dari ' + searchTotalPages()">
-    </div>
+      <!-- Info halaman -->
+      <div class="text-xs opacity-70"
+          x-text="'Halaman ' + searchPage + ' dari ' + searchTotalPages()">
+      </div>
 
-    <div class="flex items-center gap-1 px-2 overflow-x-auto scrollbar-hide max-w-full">
+      <div class="flex items-center gap-1 px-2 overflow-x-auto scrollbar-hide max-w-full">
 
-      <!-- Prev -->
-      <button 
-        @click="goToSearchPage(searchPage - 1)"
-        class="min-w-[40px] h-10 rounded-full shadow text-sm font-semibold flex items-center justify-center"
-        :class="darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'">
-        ‹
-      </button>
-
-      <!-- Pages -->
-      <template x-for="p in visibleSearchPages()" :key="p">
+        <!-- Prev -->
         <button 
-          @click="goToSearchPage(p)"
-          class="min-w-[40px] h-10 px-3 rounded-full text-sm font-medium transition-all flex items-center justify-center"
-          :class="
-            searchPage === p
-              ? 'bg-green-600 text-white scale-110'
-              : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-white text-gray-600 hover:bg-green-50')
-          "
-          x-text="p">
+          @click="goToSearchPage(searchPage - 1)"
+          class="min-w-[40px] h-10 rounded-full shadow text-sm font-semibold flex items-center justify-center"
+          :class="darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'">
+          ‹
         </button>
-      </template>
 
-      <!-- Next -->
-      <button 
-        @click="goToSearchPage(searchPage + 1)"
-        class="min-w-[40px] h-10 rounded-full shadow text-sm font-semibold flex items-center justify-center"
-        :class="darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'">
-        ›
-      </button>
+        <!-- Pages -->
+        <template x-for="p in visibleSearchPages()" :key="p">
+          <button 
+            @click="goToSearchPage(p)"
+            class="min-w-[40px] h-10 px-3 rounded-full text-sm font-medium transition-all flex items-center justify-center"
+            :class="
+              searchPage === p
+                ? 'bg-green-600 text-white scale-110'
+                : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-white text-gray-600 hover:bg-green-50')
+            "
+            x-text="p">
+          </button>
+        </template>
 
+        <!-- Next -->
+        <button 
+          @click="goToSearchPage(searchPage + 1)"
+          class="min-w-[40px] h-10 rounded-full shadow text-sm font-semibold flex items-center justify-center"
+          :class="darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'">
+          ›
+        </button>
+      </div>
     </div>
-  </div>
 
 
     <!-- ===================== HALAMAN KATEGORI ===================== -->
@@ -916,145 +935,133 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
     </section>
 
     <!-- ===================== KONTAK ===================== -->
-    <section x-show="page === 'kontak'" x-cloak class="py-14">
-      <div class="text-center mb-12">
-        <h2 class="text-4xl font-bold text-green-600 mb-3">Kontak Kami</h2>
-        <p class="text-gray-500">Hubungi kami untuk pertanyaan & pemesanan.</p>
-      </div>
+<section x-show="page === 'kontak'" x-cloak class="py-16">
+  <div class="text-center mb-14">
+    <h2 class="text-4xl font-bold text-green-600 mb-3">Kontak Kami</h2>
+    <p :class="darkMode ? 'text-gray-400' : 'text-gray-500'">
+      Hubungi kami untuk pertanyaan & pemesanan.
+    </p>
+  </div>
 
-      <div
-        class="grid md:grid-cols-2 rounded-3xl shadow-xl overflow-hidden"
-        :class="darkMode ? 'bg-gray-800 text-gray-100' : 'bg-white'"
-      >
-        <!-- INFO KONTAK -->
-        <div class="p-10 bg-gradient-to-br from-green-600 to-green-500 text-white">
-          <h3 class="text-2xl font-semibold mb-6">Wino Bangunan</h3>
+  <div
+    class="max-w-6xl mx-auto grid md:grid-cols-2 rounded-3xl shadow-2xl overflow-hidden"
+    :class="darkMode ? 'bg-gray-800 text-gray-100' : 'bg-white'"
+  >
 
-          <div class="space-y-6">
-            <!-- Alamat -->
-            <div class="flex gap-4">
-              <svg class="w-7 h-7" fill="none" stroke="white">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.5"
-                  d="M12 21s-6-4.35-6-10a6 6 0 1112 0c0 5.65-6 10-6 10z"
-                />
-              </svg>
-              <p>Jl. Veteran No.33, Langkae Araya, Kec. Towuti, Kabupaten Luwu Timur, Sulawesi Selatan 92982</p>
-            </div>
+    <!-- INFO KONTAK -->
+    <div class="p-10 bg-gradient-to-br from-green-600 to-green-500 text-white flex flex-col justify-between">
 
-            <!-- Telepon -->
-            <div class="flex gap-4">
-              <svg class="w-7 h-7" fill="none" stroke="white">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.5"
-                  d="M3 5a2 2 0 012-2h1.3c.4 0 .8.26 1 .66l1.2 3-.3 1.1-1.4 1.4a14 14 0 006.2 6.2l1.4-1.4 1.1-.3 3 1.2c.4.2.7.6.7 1V19a2 2 0 01-2 2H17C9 21 3 15 3 7V7a2 2 0 012-2z"
-                />
-              </svg>
-              <p>Telepon: (021) 555-6789</p>
-            </div>
+      <div>
+        <h3 class="text-2xl font-semibold mb-8">Wino Bangunan</h3>
 
-            <!-- Email -->
-            <div class="flex gap-4">
-              <svg class="w-7 h-7" fill="none" stroke="white">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.5"
-                  d="M3 8l7.9 5.3a2 2 0 002.2 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                />
-              </svg>
-              <p>info@winobangunan.com</p>
-            </div>
-
-            <!-- SOSIAL MEDIA -->
-            <div class="pt-6">
-              <h4 class="text-lg font-semibold mb-3 text-white">Sosial Media</h4>
-
-              <div class="flex items-center gap-4">
-                <!-- Instagram -->
-                <a
-                  href="https://instagram.com/"
-                  target="_blank"
-                  class="p-3 rounded-full bg-white/20 hover:bg-white/30 transition"
-                >
-                  <svg
-                    class="w-6 h-6 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M7 3h10a4 4 0 014 4v10a4 4 0 01-4 4H7a4 4 0 01-4-4V7a4 4 0 014-4z" />
-                    <circle cx="12" cy="12" r="3.3" />
-                    <circle cx="17" cy="7" r="1" />
-                  </svg>
-                </a>
-
-                <!-- WhatsApp -->
-                <a
-                  href="https://wa.me/6281234567890"
-                  target="_blank"
-                  class="p-3 rounded-full bg-white/20 hover:bg-white/30 transition"
-                >
-                  <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path
-                      d="M12 2A10 10 0 0 0 2 12a9.93 9.93 0 0 0 1.47 5.25L2 22l4.88-1.43A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.25-1.23l-.3-.17-2.9.85.88-2.82-.18-.29A8 8 0 1 1 12 20zm4.2-5.7c-.23-.12-1.35-.67-1.56-.75s-.36-.12-.51.12-.59.75-.73.9-.27.18-.49.06a6.52 6.52 0 0 1-1.9-1.17 7.1 7.1 0 0 1-1.31-1.64c-.14-.24 0-.37.1-.49.1-.1.24-.27.37-.41s.16-.24.25-.41a.44.44 0 0 0 0-.43c-.07-.12-.51-1.26-.7-1.72-.19-.45-.38-.39-.51-.39h-.44a.86.86 0 0 0-.62.29A2.58 2.58 0 0 0 6 9.4 4.49 4.49 0 0 0 6.9 12a10 10 0 0 0 3.69 3.53 11.83 11.83 0 0 0 1.71.63 4.1 4.1 0 0 0 1.88.12 3.08 3.08 0 0 0 2.08-1.48 2.51 2.51 0 0 0 .17-1.48c-.05-.07-.2-.12-.43-.24"
-                    />
-                  </svg>
-                </a>
-
-                <!-- Facebook -->
-                <a
-                  href="https://facebook.com/"
-                  target="_blank"
-                  class="p-3 rounded-full bg-white/20 hover:bg-white/30 transition"
-                >
-                  <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path
-                      d="M22 12.07C22 6.48 17.52 2 11.93 2S1.86 6.48 1.86 12.07c0 4.99 3.66 9.13 8.44 9.93v-7.03H7.9v-2.9h2.4V9.41c0-2.38 1.42-3.7 3.6-3.7 1.04 0 2.12.18 2.12.18v2.33h-1.2c-1.18 0-1.55.74-1.55 1.49v1.78h2.64l-.42 2.9h-2.22v7.03c4.78-.8 8.44-4.94 8.44-9.93z"
-                    />
-                  </svg>
-                </a>
-
-                <!-- TikTok -->
-                <a
-                  href="https://tiktok.com/"
-                  target="_blank"
-                  class="p-3 rounded-full bg-white/20 hover:bg-white/30 transition"
-                >
-                  <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path
-                      d="M12.7 2h2.4a5.9 5.9 0 0 0 5.9 5.9v2.4a8.3 8.3 0 0 1-4.7-1.5v7.6A5.6 5.6 0 1 1 10 10a5.5 5.5 0 0 1 2.7.7v2.8a2.8 2.8 0 1 0 1.7 2.5V2z"
-                    />
-                  </svg>
-                </a>
-              </div>
-            </div>
+        <div class="space-y-6">
+          <!-- Alamat -->
+          <div class="flex gap-4 items-start">
+            <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="white" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7"
+                d="M12 21s-6-4.35-6-10a6 6 0 1112 0c0 5.65-6 10-6 10z" />
+            </svg>
+            <p class="leading-relaxed text-sm">
+              Jl. Veteran No.33, Langkae Araya, Towuti, Luwu Timur, Sulawesi Selatan 92982
+            </p>
           </div>
 
-        </div>
+          <!-- Telepon -->
+          <div class="flex gap-4 items-start">
+            <svg class="w-6 h-6" fill="none" stroke="white" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7"
+                d="M3 5a2 2 0 012-2h1.3c.4 0 .8.26 1 .66l1.2 3-.3 1.1-1.4 1.4a14 14 0 006.2 6.2l1.4-1.4 1.1-.3 3 1.2c.4.2.7.6.7 1V19a2 2 0 01-2 2H17C9 21 3 15 3 7z" />
+            </svg>
+            <p>(021) 555-6789</p>
+          </div>
 
-        <!-- MAPS -->
-        <div
-          class="p-10 flex flex-col justify-center"
-          :class="darkMode ? 'bg-gray-900' : 'bg-gray-50'"
-        >
-          <h3 class="text-xl font-semibold mb-4">Lokasi Kami</h3>
-          <p class="text-gray-500 mb-6">Klik tombol untuk melihat lokasi kami di Google Maps.</p>
-
-          <button
-            @click="openMap()"
-            class="px-6 py-3 rounded-full bg-green-600 text-white hover:bg-green-700"
-          >
-            Lihat di Google Maps
-          </button>
+          <!-- Email -->
+          <div class="flex gap-4 items-start">
+            <svg class="w-6 h-6" fill="none" stroke="white" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7"
+                d="M3 8l7.9 5.3a2 2 0 002.2 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            <p>info@winobangunan.com</p>
+          </div>
         </div>
       </div>
-    </section>
+
+      <!-- SOSIAL MEDIA -->
+      <div>
+        <h4 class="text-lg font-semibold mt-10 mb-4">Ikuti Kami</h4>
+        <div class="flex gap-4">
+
+          <!-- Social Icon Style Reusable -->
+          <template x-for="item in ['instagram','wa','facebook','tiktok']">
+            <a
+              :href="item === 'wa' 
+                ? 'https://wa.me/6281234567890' 
+                : `https://${item}.com/`"
+              target="_blank"
+              class="p-3 rounded-full bg-white/20 hover:bg-white/30 hover:scale-110 transition transform duration-200">
+              
+              <!-- ICONS -->
+              <svg x-show="item==='instagram'" class="w-6 h-6" fill="none" stroke="white" viewBox="0 0 24 24">
+                <rect x="3" y="3" width="18" height="18" rx="5"/>
+                <circle cx="12" cy="12" r="3.3"/>
+                <circle cx="17" cy="7" r="1"/>
+              </svg>
+
+              <svg x-show="item==='facebook'" class="w-6 h-6" fill="white" viewBox="0 0 24 24">
+                <path d="M22 12.07C22 6.48 17.52 2 11.93 2S1.86 6.48 1.86 12.07c0 4.99 3.66 9.13 8.44 9.93v-7.03H7.9v-2.9h2.4V9.41c0-2.38 1.42-3.7 3.6-3.7 1.04 0 2.12.18 2.12.18v2.33h-1.2c-1.18 0-1.55.74-1.55 1.49v1.78h2.64l-.42 2.9h-2.22v7.03c4.78-.8 8.44-4.94 8.44-9.93z"/>
+              </svg>
+
+              <svg x-show="item==='tiktok'" class="w-6 h-6" fill="white" viewBox="0 0 24 24">
+                <path d="M12.7 2h2.4a5.9 5.9 0 0 0 5.9 5.9v2.4a8.3 8.3 0 0 1-4.7-1.5v7.6A5.6 5.6 0 1 1 10 10a5.5 5.5 0 0 1 2.7.7v2.8a2.8 2.8 0 1 0 1.7 2.5V2z"/>
+              </svg>
+
+              <svg x-show="item==='wa'" class="w-6 h-6" fill="white" viewBox="0 0 24 24">
+                <path d="M12 2A10 10 0 0 0 2 12c0 1.8.47 3.5 1.3 5L2 22l5.1-1.3A10 10 0 1 0 12 2z"/>
+              </svg>
+
+            </a>
+          </template>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- MAPS & JAM OPERASIONAL -->
+    <div
+      class="p-10 flex flex-col justify-between"
+      :class="darkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-800'"
+    >
+
+      <div>
+        <h3 class="text-xl font-semibold mb-3">Lokasi Kami</h3>
+        <p :class="darkMode ? 'text-gray-400' : 'text-gray-500'" class="mb-6">
+          Klik tombol di bawah untuk membuka lokasi di Google Maps.
+        </p>
+
+        <button
+          @click="openMap()"
+          class="w-full md:w-auto px-6 py-3 rounded-full bg-green-600 text-white font-semibold hover:bg-green-700 transition shadow-md hover:shadow-lg">
+          📍 Lihat di Google Maps
+        </button>
+      </div>
+
+      <!-- JAM OPERASIONAL -->
+      <div class="mt-10 p-5 rounded-xl bg-green-600/10 border border-green-500/20">
+        <h4 class="font-semibold text-lg mb-2">🕒 Jam Operasional</h4>
+        <p>Senin - Sabtu: 08.00 - 17.00</p>
+        <p>Minggu: Libur</p>
+
+        <div class="mt-3 font-semibold"
+          :class="isStoreOpen() ? 'text-green-500' : 'text-red-500'"
+          x-text="isStoreOpen() ? '🟢 Toko Sedang Buka' : '🔴 Toko Tutup'">
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 
     <!-- ===================== TENTANG KAMI ===================== -->
     <section x-show="page === 'tentang kami'" x-cloak class="py-20">
@@ -1472,6 +1479,10 @@ function winoApp(){
     darkMode: false,
     mobileMenu: false,
     currentAd: 0,
+    storeOpenHour: 8,
+    storeCloseHour: 17,
+    filterStock: "",
+    filterPrice: "",
 
     // preview / lightbox state
     showPreview: false,
@@ -1549,6 +1560,7 @@ function winoApp(){
 
       this.$watch("page", (newPage) => {
     if (newPage !== "search") {
+       this.searchPage = 1;
         this.searchInput = "";
         this.searchQuery = "";
     }
@@ -1610,17 +1622,52 @@ function winoApp(){
     },
 
     // filter catalog per category id (used in homepage carousel)
-    filteredCatalogByCategory(catId){
-      const cat = this.allCategories.find(c => c.id === catId);
-      if (!cat) return [];
+    filteredCatalogByCategory(catId) {
+        const cat = this.allCategories.find(c => c.id === catId);
+        if (!cat) return [];
 
-      const q = this.searchQuery.toLowerCase();
+        let results = this.catalog.filter(item =>
+            item.category === cat.idLabel &&
+            item.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+        );
 
-      return this.catalog.filter(i =>
-        i.category === cat.idLabel &&
-        i.name.toLowerCase().includes(q)
-      );
+        // Filter stok
+        if (this.filterStock) {
+            results = results.filter(item => {
+                const stock = Number(item.stock);
+                if (this.filterStock === "ready") return stock > 10;
+                if (this.filterStock === "limit") return stock > 0 && stock <= 10;
+                if (this.filterStock === "empty") return stock <= 0;
+                return true;
+            });
+        }
+
+        // Sorting harga
+        if (this.filterPrice) {
+            results = results.sort((a, b) => {
+                const priceA = parseInt(String(a.price).replace(/[^\d]/g, '')) || 0;
+                const priceB = parseInt(String(b.price).replace(/[^\d]/g, '')) || 0;
+
+                if (this.filterPrice === "low") return priceA - priceB;
+                if (this.filterPrice === "high") return priceB - priceA;
+
+                return 0;
+            });
+        }
+
+        return results;
     },
+
+    isStoreOpen() {
+    const now = new Date();
+    const hour = now.getHours();
+    const day = now.getDay(); // 0 = Minggu
+
+    if (day === 0) return false; // Minggu tutup
+
+    return hour >= this.storeOpenHour && hour < this.storeCloseHour;
+},
+
 
     scrollCarousel(catId, direction) {
         const id = "carousel-" + catId;
@@ -1985,42 +2032,71 @@ resetPagination(catId){
         this.startY = 0;
     },
 
-filteredGlobalSearch() {
-    const q = this.searchQuery.toLowerCase();
+    filteredGlobalSearch() {
+        let q = this.searchQuery?.toLowerCase() || '';
 
-    if (!q) return [];
+        // 1. Filter berdasarkan search
+        let results = this.catalog.filter(item => {
+            return item.name.toLowerCase().includes(q);
+        });
 
-    return this.catalog.filter(item =>
-        item.name.toLowerCase().includes(q)
-    );
-},
+        // 2. Filter stok (paksa ke number)
+        if (this.filterStock) {
+            results = results.filter(item => {
+                const stock = Number(item.stock);
 
-handleSearch() {
-    const q = this.searchInput.trim();
+                if (this.filterStock === "ready") return stock > 10;
+                if (this.filterStock === "limit") return stock > 0 && stock <= 10;
+                if (this.filterStock === "empty") return stock <= 0;
 
-    if (!q) return;
+                return true;
+            });
+        }
 
-    // ✅ simpan keyword
-    this.searchQuery = q;
+        // 3. Sorting harga (bersih dari Rp dan titik)
+        if (this.filterPrice) {
+            results = results.sort((a, b) => {
 
-    // ✅ reset search pagination
-    this.searchPage = 1;
+                const priceA = parseInt(
+                    String(a.price).replace(/[^\d]/g, '')
+                ) || 0;
 
-    const isCategoryPage = this.allCategories.some(cat => cat.idLabel === this.page);
+                const priceB = parseInt(
+                    String(b.price).replace(/[^\d]/g, '')
+                ) || 0;
 
-    if (this.page === 'beranda','kateogori') {
-        this.page = 'search';
-    } 
-    else if (isCategoryPage) {
-        const catObj = this.allCategories.find(c => c.idLabel === this.page);
-        if (catObj) this.resetPagination(catObj.id);
-    } 
-    else {
-        this.page = 'search';
-    }
+                if (this.filterPrice === "low") {
+                    return priceA - priceB; // murah ➡ mahal
+                }
 
-    window.scrollTo({ top: 0, behavior: "smooth" });
-},
+                if (this.filterPrice === "high") {
+                    return priceB - priceA; // mahal ➡ murah
+                }
+
+                return 0;
+            });
+        }
+
+        return results;
+    },
+
+
+  handleSearch() {
+      const q = this.searchInput.trim();
+
+      if (!q) return;
+
+      // Simpan keyword
+      this.searchQuery = q;
+
+      // Reset pagination search
+      this.searchPage = 1;
+
+      // ✅ Apapun halaman asalnya, search selalu ke halaman 'search'
+      this.page = 'search';
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+  },
 
 
 paginatedSearchResults() {
