@@ -1409,25 +1409,28 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
 </div>
 
 <!-- NAV DESKTOP -->
-<button 
-    @click="showPrevImage()"
-    class="hidden md:flex modal-nav-btn absolute left-8 top-1/2 -translate-y-1/2 rounded-full items-center justify-center shadow-md"
-    :class="darkMode 
-        ? 'bg-white/10 border-white/20 text-white' 
-        : 'bg-black/10 border-black/20 text-black'"
->
-    ‹
-</button>
+<div x-show="showPreview" x-cloak>
+    <button 
+        @click="showPrevImage()"
+        class="hidden md:flex modal-nav-btn absolute left-8 top-1/2 -translate-y-1/2 rounded-full items-center justify-center shadow-md"
+        :class="darkMode 
+            ? 'bg-white/10 border-white/20 text-white' 
+            : 'bg-black/10 border-black/20 text-black'"
+    >
+        ‹
+    </button>
 
-<button 
-    @click="showNextImage()"
-    class="hidden md:flex modal-nav-btn absolute right-8 top-1/2 -translate-y-1/2 rounded-full items-center justify-center shadow-md"
-    :class="darkMode 
-        ? 'bg-white/10 border-white/20 text-white' 
-        : 'bg-black/10 border-black/20 text-black'"
->
-    ›
-</button>
+    <button 
+        @click="showNextImage()"
+        class="hidden md:flex modal-nav-btn absolute right-8 top-1/2 -translate-y-1/2 rounded-full items-center justify-center shadow-md"
+        :class="darkMode 
+            ? 'bg-white/10 border-white/20 text-white' 
+            : 'bg-black/10 border-black/20 text-black'"
+    >
+        ›
+    </button>
+</div>
+
 
 <!-- MOBILE NAV -->
 <div class="md:hidden flex justify-between items-center w-full mt-4 px-3">
