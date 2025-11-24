@@ -717,43 +717,49 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
 </section>
 
 <!-- ================= PAGINATION SEARCH ================= -->
-<div x-show="searchTotalPages() > 1"
-     class="flex justify-center mt-10 gap-2 items-center">
+  <div 
+    x-show="searchTotalPages() > 1"
+    class="mt-10 flex flex-col items-center gap-3">
 
-  <!-- Prev -->
-  <button 
-    @click="goToSearchPage(searchPage - 1)"
-    class="w-9 h-9 rounded-full shadow"
-    :class="darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'">
-    ‹
-  </button>
+    <!-- Info halaman -->
+    <div class="text-xs opacity-70"
+        x-text="'Halaman ' + searchPage + ' dari ' + searchTotalPages()">
+    </div>
 
-  <!-- Page Numbers -->
-  <template x-for="p in searchTotalPages()" :key="p">
-    <button 
-      @click="goToSearchPage(p)"
-      class="px-3 h-9 rounded-full text-sm font-medium transition-all"
-      :class="
-        searchPage === p
-          ? 'bg-green-600 text-white scale-110'
-          : (darkMode 
-              ? 'bg-gray-800 text-gray-300' 
-              : 'bg-white text-gray-600 hover:bg-green-50')
-      "
-      x-text="p">
-    </button>
-  </template>
+    <div class="flex items-center gap-1 px-2 overflow-x-auto scrollbar-hide max-w-full">
 
-  <!-- Next -->
-  <button 
-    @click="goToSearchPage(searchPage + 1)"
-    class="w-9 h-9 rounded-full shadow"
-    :class="darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'">
-    ›
-  </button>
+      <!-- Prev -->
+      <button 
+        @click="goToSearchPage(searchPage - 1)"
+        class="min-w-[40px] h-10 rounded-full shadow text-sm font-semibold flex items-center justify-center"
+        :class="darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'">
+        ‹
+      </button>
 
-</div>
+      <!-- Pages -->
+      <template x-for="p in visibleSearchPages()" :key="p">
+        <button 
+          @click="goToSearchPage(p)"
+          class="min-w-[40px] h-10 px-3 rounded-full text-sm font-medium transition-all flex items-center justify-center"
+          :class="
+            searchPage === p
+              ? 'bg-green-600 text-white scale-110'
+              : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-white text-gray-600 hover:bg-green-50')
+          "
+          x-text="p">
+        </button>
+      </template>
 
+      <!-- Next -->
+      <button 
+        @click="goToSearchPage(searchPage + 1)"
+        class="min-w-[40px] h-10 rounded-full shadow text-sm font-semibold flex items-center justify-center"
+        :class="darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'">
+        ›
+      </button>
+
+    </div>
+  </div>
 
 
     <!-- ===================== HALAMAN KATEGORI ===================== -->
@@ -831,38 +837,45 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
   </div>
 
   <!-- PAGINATION -->
-  <div x-show="totalPages(cat.id) > 1"
-       class="flex justify-center mt-8 gap-2 items-center">
+  <div 
+    x-show="totalPages(cat.id) > 1"
+    class="mt-10 flex flex-col items-center gap-3">
 
-    <!-- Prev -->
-    <button 
-        @click="goToPage(cat.id, (currentPages[cat.id] || 1) - 1)"
-        class="w-9 h-9 rounded-full shadow"
-        :class="darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'">
-        ‹
-    </button>
+    <!-- Info Halaman -->
+    <div class="text-xs opacity-70"
+        x-text="'Halaman ' + (currentPages[cat.id] || 1) + ' dari ' + totalPages(cat.id)">
+    </div>
 
-    <!-- Pages -->
-    <template x-for="pageNumber in totalPages(cat.id)" :key="pageNumber">
+    <!-- Wrapper -->
+    <div class="flex items-center gap-1 px-2 overflow-x-auto scrollbar-hide max-w-full">
+
+      <!-- Tombol Prev -->
       <button 
-          @click="goToPage(cat.id, pageNumber)"
-          class="px-3 h-9 rounded-full text-sm font-medium transition-all"
-          :class="
-              (currentPages[cat.id] || 1) === pageNumber
-              ? 'bg-green-600 text-white scale-110'
-              : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-white text-gray-600 hover:bg-green-50')
-          "
-          x-text="pageNumber">
-      </button>
-    </template>
+          @click="goToPage(cat.id, (currentPages[cat.id] || 1) - 1)"
+          class="min-w-[40px] h-10 rounded-full shadow text-sm font-semibold flex items-center justify-center"
+          :class="darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'">‹</button>
 
-    <!-- Next -->
-    <button 
-        @click="goToPage(cat.id, (currentPages[cat.id] || 1) + 1)"
-        class="w-9 h-9 rounded-full shadow"
-        :class="darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'">
-        ›
-    </button>
+      <!-- Nomor Halaman -->
+      <template x-for="pageNumber in totalPages(cat.id)" :key="pageNumber">
+        <button 
+            @click="goToPage(cat.id, pageNumber)"
+            class="min-w-[40px] h-10 px-3 rounded-full text-sm font-medium transition-all flex items-center justify-center"
+            :class="
+                (currentPages[cat.id] || 1) === pageNumber
+                ? 'bg-green-600 text-white scale-110'
+                : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-white text-gray-600 hover:bg-green-50')
+            "
+            x-text="pageNumber">
+        </button>
+      </template>
+
+      <!-- Tombol Next -->
+      <button 
+          @click="goToPage(cat.id, (currentPages[cat.id] || 1) + 1)"
+          class="min-w-[40px] h-10 rounded-full shadow text-sm font-semibold flex items-center justify-center"
+          :class="darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'">›</button>
+    </div>
+  </div>
 
   </div>
 
@@ -1961,7 +1974,7 @@ handleSearch() {
 
     const isCategoryPage = this.allCategories.some(cat => cat.idLabel === this.page);
 
-    if (this.page === 'beranda') {
+    if (this.page === 'beranda','kateogori') {
         this.page = 'search';
     } 
     else if (isCategoryPage) {
@@ -1993,8 +2006,39 @@ goToSearchPage(page) {
     window.scrollTo({ top: 0, behavior: "smooth" });
 },
 
+visiblePages(catId) {
+    const current = this.currentPages[catId] || 1;
+    const total = this.totalPages(catId);
+    const range = 2;
 
+    let pages = [];
 
+    let start = Math.max(1, current - range);
+    let end = Math.min(total, current + range);
+
+    for (let i = start; i <= end; i++) {
+        pages.push(i);
+    }
+
+    return pages;
+},
+
+visibleSearchPages() {
+    const current = this.searchPage;
+    const total = this.searchTotalPages();
+    const range = 2;
+
+    let pages = [];
+
+    let start = Math.max(1, current - range);
+    let end = Math.min(total, current + range);
+
+    for (let i = start; i <= end; i++) {
+        pages.push(i);
+    }
+
+    return pages;
+},
 
     // =============================
     // AUTO SCROLL THUMBNAIL ACTIVE
