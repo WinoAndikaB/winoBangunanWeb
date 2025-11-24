@@ -4,7 +4,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Wino Bangunan</title>
+  
+  <title>Wino Bangunan - Toko Material Terlengkap di Towuti</title>
+  <meta name="description" content="Wino Bangunan adalah toko bahan bangunan terlengkap di Towuti, Luwu Timur. Menyediakan semen, besi, cat, dan lainnya.">
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
@@ -420,6 +423,14 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
 .tp-main-image.fade-in {
     transform: translateX(0) scale(1);
     opacity: 1;
+}
+
+.tp-kategori {
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.15s ease;
+}
+.tp-kategori:hover {
+    transform: translateX(3px);
 }
 
 
@@ -1351,7 +1362,11 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
             class="tp-info overflow-y-auto max-h-[420px]"
             :class="darkMode ? 'bg-gray-900 text-gray-100' : 'bg-white text-gray-900'"
         >
-            <h3 class="tp-kategori text-green-600 font-semibold" x-text="previewCategory"></h3>
+            <button 
+              @click="goToPreviewCategory()"
+              class="tp-kategori font-semibold text-green-600 underline hover:text-green-800 transition"
+              x-text="previewCategory">
+            </button>
             <h2 class="tp-title" x-text="previewName"></h2>
             <div class="tp-price" x-text="previewPrice"></div>
 
@@ -1867,6 +1882,25 @@ resetPagination(catId){
       document.documentElement.style.overflow = '';
       document.body.style.overflow = '';
     },
+
+    goToPreviewCategory() {
+    if (!this.previewCategory || this.previewCategory === "-") return;
+
+    // Tutup modal dulu
+    this.closePreview();
+
+    // Arahkan ke halaman kategori
+    this.page = this.previewCategory;
+
+    // Reset pagination kategori
+    const catObj = this.allCategories.find(c => c.idLabel === this.previewCategory);
+    if (catObj) {
+        this.resetPagination(catObj.id);
+    }
+
+    // Scroll ke atas
+    window.scrollTo({ top: 0, behavior: "smooth" });
+},
 
     showNextImage(){
         const img = document.querySelector(".tp-main-image");
