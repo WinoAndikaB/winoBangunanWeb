@@ -34,410 +34,553 @@
 <style>
 /* ========= OVERLAY ========= */
 .tp-overlay {
-    background: rgba(0,0,0,.75);
-    backdrop-filter: blur(6px);
-    animation: fadeIn .25s ease;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  animation: fadeIn 0.25s ease;
 }
-@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 
 /* ========= MODAL WRAPPER ========= */
 .tp-modal {
-    width: 100%;
-    max-width: 900px;
-    background: #fff;
-    border-radius: 18px;
-    overflow: hidden;
-    animation: scaleIn .28s ease;
+  width: 100%;
+  max-width: 900px;
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  animation: scaleIn 0.28s ease;
 }
 @keyframes scaleIn {
-    from { transform: scale(.94); opacity:0 }
-    to   { transform: scale(1); opacity:1 }
+  from { transform: scale(0.94); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
 }
 
 /* ========= LEFT IMAGE AREA ========= */
-.tp-image-box{
-    background: #f3f3f3;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    height:420px;
-    position:relative;
+.tp-image-box {
+  background: #f3f3f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 420px;
+  position: relative;
 }
-.tp-image-box img{
-    max-width:100%;
-    max-height:100%;
-    transition: transform .3s ease;
-    cursor: grab;
+.tp-image-box img {
+  max-width: 100%;
+  max-height: 100%;
+  transition: transform 0.15s ease, transform-origin 0.1s ease;
+  cursor: zoom-in;
+}
+.tp-image-box.zoom-active img {
+  cursor: zoom-out;
 }
 
 /* ========= RIGHT INFO AREA ========= */
 .tp-info {
-    padding: 22px;
+  padding: 22px;
 }
 .tp-title {
-    font-size: 22px;
-    font-weight: 700;
+  font-size: 22px;
+  font-weight: 700;
 }
 .tp-price {
-    font-size: 26px;
-    font-weight: 700;
-    color:#03ac0e;
-    margin-top:6px;
+  font-size: 26px;
+  font-weight: 700;
+  color: #03ac0e;
+  margin-top: 6px;
 }
 .tp-info-list {
-    margin-top:14px;
-    font-size:14px;
+  margin-top: 14px;
+  font-size: 14px;
 }
 .tp-info-row {
-    display:flex;
-    justify-content:space-between;
-    padding:6px 0;
-    border-bottom:1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
 }
 
 /* ========= THUMBNAIL BAR ========= */
 .tp-thumbs img {
-    transition: 
-        transform .25s ease,
-        opacity .25s ease,
-        box-shadow .25s ease,
-        border .25s ease;
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease,
+    box-shadow 0.25s ease,
+    border 0.25s ease;
 }
-
 .tp-thumbs img:hover {
-    transform: scale(1.08) translateY(-2px);
+  transform: scale(1.08) translateY(-2px);
 }
-
 .tp-thumbs img.active {
-    transform: scale(1.12);
-    border-color: #03ac0e !important;
-    box-shadow: 
-        0 0 0 2px rgba(3,172,14,0.3),
-        0 8px 16px rgba(0,0,0,0.25);
-    opacity: 1;
+  transform: scale(1.12);
+  border-color: #03ac0e !important;
+  box-shadow:
+    0 0 0 2px rgba(3, 172, 14, 0.3),
+    0 8px 16px rgba(0, 0, 0, 0.25);
+  opacity: 1;
 }
 
 /* Animasi kecil saat aktif berpindah */
 @keyframes thumbPop {
-    0%   { transform: scale(1); }
-    50%  { transform: scale(1.18); }
-    100% { transform: scale(1.12); }
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.18); }
+  100% { transform: scale(1.12); }
 }
-
 .tp-thumbs img.thumb-animate {
-    animation: thumbPop .2s ease;
+  animation: thumbPop 0.2s ease;
 }
-
 
 /* ========= NAV BUTTONS ========= */
 .tp-nav-btn {
-    position:absolute;
-    top:50%;
-    transform:translateY(-50%);
-    width:42px;
-    height:42px;
-    border-radius:50%;
-    background:rgba(255,255,255,0.85);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:26px;
-    cursor:pointer;
-    box-shadow:0 2px 10px rgba(0,0,0,0.2);
-    transition:.25s;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  animation: navPulse 4s ease-in-out infinite;
+  transition: transform 0.15s ease, background 0.25s ease;
 }
-.tp-nav-btn:hover { background:white; }
+.tp-nav-btn:hover {
+  background: #fff;
+  transform: translateY(-50%) scale(1.15);
+}
+.tp-nav-btn:active {
+  transform: translateY(-50%) scale(0.85);
+}
+.tp-prev { left: 15px; }
+.tp-next { right: 15px; }
 
-.tp-prev { left:15px; }
-.tp-next { right:15px; }
+@keyframes navPulse {
+  0%   { transform: translateY(-50%) scale(1); }
+  50%  { transform: translateY(-50%) scale(1.06); }
+  100% { transform: translateY(-50%) scale(1); }
+}
 
 /* Close Btn */
 .tp-close {
-    position:absolute;
-    top:15px;
-    right:15px;
-    width:40px;
-    height:40px;
-    background:white;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    box-shadow:0 2px 10px rgba(0,0,0,0.25);
-    cursor:pointer;
-    font-size:20px;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  font-size: 20px;
 }
 
 /* ===================== CLOSE BUTTON ANIMATION ===================== */
-
-/* Soft idle pulse (tiap 4 detik) */
 @keyframes softPulse {
-    0%   { transform: scale(1); }
-    50%  { transform: scale(1.06); }
-    100% { transform: scale(1); }
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.06); }
+  100% { transform: scale(1); }
 }
-
 .animate-close-btn {
-    animation: softPulse 4s ease-in-out infinite;
+  animation: softPulse 4s ease-in-out infinite;
 }
-
-/* Hover effect - smooth enlarge */
 .animate-close-btn:hover {
-    transform: scale(1.12);
+  transform: scale(1.12);
 }
-
-/* Press effect - quick compress */
 .animate-close-btn:active {
-    transform: scale(0.88);
-}
-
-/* ===================== NAV BUTTON ANIMATION ===================== */
-
-/* Soft idle pulse */
-@keyframes navPulse {
-    0%   { transform: translateY(-50%) scale(1); }
-    50%  { transform: translateY(-50%) scale(1.06); }
-    100% { transform: translateY(-50%) scale(1); }
-}
-
-.tp-nav-btn {
-    animation: navPulse 4s ease-in-out infinite;
-    transition: transform .15s ease, background .25s ease;
-}
-
-/* Hover - enlarge */
-.tp-nav-btn:hover {
-    transform: translateY(-50%) scale(1.15);
-}
-
-/* Click - compress */
-.tp-nav-btn:active {
-    transform: translateY(-50%) scale(0.85);
+  transform: scale(0.88);
 }
 
 /* ===================== DARK MODE FIX ===================== */
-
 /* BASIC BACKGROUND & TEXT */
 body.bg-gray-900 {
-    background: #0d0d0d !important;      /* ChatGPT black */
-    color: #ececec !important;           /* ChatGPT soft white */
+  background: #0d0d0d !important;
+  color: #ececec !important;
 }
 
 /* Universal border smoothing */
 body.bg-gray-900 * {
-    border-color: #2a2a2a !important;
-    scroll-behavior: smooth;
+  border-color: #2a2a2a !important;
+  scroll-behavior: smooth;
 }
 
-/* ========================= HEADER ========================= */
+/* HEADER */
 body.bg-gray-900 header {
-    background: #0d0d0d !important;
-    border-bottom: 1px solid #2a2a2a !important;
+  background: #0d0d0d !important;
+  border-bottom: 1px solid #2a2a2a !important;
 }
-
 body.bg-gray-900 header button:hover {
-    background: #1c1c1c !important;
+  background: #1c1c1c !important;
 }
 
-/* ========================= SEARCH ========================= */
+/* SEARCH */
 body.bg-gray-900 input[type="search"] {
-    background: #1a1a1a !important;
-    color: #ececec !important;
-    border-color: #2a2a2a !important;
+  background: #1a1a1a !important;
+  color: #ececec !important;
+  border-color: #2a2a2a !important;
 }
 body.bg-gray-900 input[type="search"]::placeholder {
-    color: #777 !important;
+  color: #777 !important;
 }
 
-/* ========================= NAVBAR ========================= */
+/* NAVBAR */
 body.bg-gray-900 nav {
-    background: #0d0d0d !important;
-    border-bottom: 1px solid #2a2a2a !important;
+  background: #0d0d0d !important;
+  border-bottom: 1px solid #2a2a2a !important;
 }
-
 body.bg-gray-900 nav button {
-    color: #dcdcdc !important;
+  color: #dcdcdc !important;
 }
 body.bg-gray-900 nav button:hover {
-    background: #1d1d1d !important;
-    color: #00ff90 !important; /* ChatGPT green-ish accent */
+  background: #1d1d1d !important;
+  color: #00ff90 !important;
 }
 
-/* ========================= CARDS / PANELS ========================= */
+/* CARDS / PANELS */
 body.bg-gray-900 .rounded-xl,
 body.bg-gray-900 .rounded-lg,
 body.bg-gray-900 .rounded-2xl,
 body.bg-gray-900 .shadow,
 body.bg-gray-900 .shadow-md {
-    background: #1a1a1a !important;      /* ChatGPT panel */
-    border-color: #2a2a2a !important;
-    color: #ececec !important;
+  background: #1a1a1a !important;
+  border-color: #2a2a2a !important;
+  color: #ececec !important;
 }
-
 body.bg-gray-900 .rounded-xl:hover,
 body.bg-gray-900 .rounded-lg:hover {
-    background: #222 !important;          /* smooth hover */
+  background: #222 !important;
 }
 
-/* ========================= PRODUCT CARDS ========================= */
+/* PRODUCT CARDS */
 body.bg-gray-900 article {
-    background: #1a1a1a !important;
-    border-color: #2a2a2a !important;
-    color: #ececec !important;
+  background: #1a1a1a !important;
+  border-color: #2a2a2a !important;
+  color: #ececec !important;
 }
-
 body.bg-gray-900 article:hover {
-    background: #232323 !important;
+  background: #232323 !important;
 }
-
 body.bg-gray-900 article p {
-    color: #a8a8a8 !important;
+  color: #a8a8a8 !important;
 }
 
-/* ========================= KONTAK, PARTNER, TENTANG ========================= */
+/* KONTAK, PARTNER, TENTANG */
 body.bg-gray-900 .bg-gray-50,
 body.bg-gray-900 .contact-box,
 body.bg-gray-900 .partner-card {
-    background: #1a1a1a !important;
-    color: #ececec !important;
+  background: #1a1a1a !important;
+  color: #ececec !important;
 }
 
-/* ========================= FOOTER ========================= */
+/* FOOTER */
 body.bg-gray-900 footer {
-    background: #0d0d0d !important;
-    color: #dcdcdc !important;
+  background: #0d0d0d !important;
+  color: #dcdcdc !important;
 }
-
 body.bg-gray-900 footer .border-t {
-    border-color: #2a2a2a !important;
+  border-color: #2a2a2a !important;
 }
-
 body.bg-gray-900 footer a:hover {
-    color: #2df59d !important; /* ChatGPT-style glow green */
+  color: #2df59d !important;
 }
 
-/* ========================= BUTTONS ========================= */
+/* BUTTONS */
 body.bg-gray-900 button {
-    background: #1a1a1a !important;
-    color: #ececec !important;
-    border-color: #2a2a2a !important;
+  background: #1a1a1a !important;
+  color: #ececec !important;
+  border-color: #2a2a2a !important;
 }
 body.bg-gray-900 button:hover {
-    background: #262626 !important;
+  background: #262626 !important;
 }
 
-/* Green CTA tetap */
+/* Green CTA */
 body.bg-gray-900 .bg-green-600 {
-    background: #01a56b !important; /* ChatGPT green */
+  background: #01a56b !important;
 }
 body.bg-gray-900 .bg-green-600:hover {
-    background: #00c47f !important;
+  background: #00c47f !important;
 }
 
-/* ========================= MODAL (PREVIEW) ========================= */
+/* MODAL (PREVIEW) */
 body.bg-gray-900 .tp-modal {
-    background: #1a1a1a !important;
-    color: #ececec !important;
+  background: #1a1a1a !important;
+  color: #ececec !important;
 }
-
 body.bg-gray-900 .tp-image-box {
-    background: #161616 !important;
+  background: #161616 !important;
 }
-
 body.bg-gray-900 .tp-info {
-    background: #1a1a1a !important;
+  background: #1a1a1a !important;
 }
-
 body.bg-gray-900 .tp-thumbs {
-    border-color: #2a2a2a !important;
+  border-color: #2a2a2a !important;
 }
-
 body.bg-gray-900 .tp-close {
-    background: #1f1f1f !important;
-    color: #ececec !important;
+  background: #1f1f1f !important;
+  color: #ececec !important;
 }
 body.bg-gray-900 .tp-close:hover {
-    background: #2b2b2b !important;
+  background: #2b2b2b !important;
 }
-
 body.bg-gray-900 .tp-nav-btn {
-    background: rgba(255,255,255,0.1) !important;
-    color: #fff !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
 }
 body.bg-gray-900 .tp-nav-btn:hover {
-    background: rgba(255,255,255,0.18) !important;
+  background: rgba(255, 255, 255, 0.18) !important;
 }
 
-/* ========================= SCROLLBAR LIKE CHATGPT ========================= */
+/* SCROLLBAR LIKE CHATGPT */
 body.bg-gray-900 ::-webkit-scrollbar {
-    width: 8px;
+  width: 8px;
 }
 body.bg-gray-900 ::-webkit-scrollbar-track {
-    background: #111;
+  background: #111;
 }
 body.bg-gray-900 ::-webkit-scrollbar-thumb {
-    background: #333;
-    border-radius: 4px;
+  background: #333;
+  border-radius: 4px;
 }
 body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
-    background: #444;
-}
-
-.tp-image-box img {
-    transition: transform 0.15s ease, transform-origin 0.1s ease;
-    cursor: zoom-in;
-}
-.tp-image-box.zoom-active img {
-    cursor: zoom-out;
-}
-
-/* MAGNIFIER LENS */
-.magnifier-lens {
-    position: absolute;
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    pointer-events: none;
-    border: 2px solid rgba(0,0,0,.2);
-    box-shadow: 0 8px 25px rgba(0,0,0,.25);
-    background-repeat: no-repeat;
-    display: none;
-    z-index: 20;
+  background: #444;
 }
 
 /* Animasi gambar utama */
 .tp-main-image {
-    transition: transform .25s ease, opacity .25s ease;
+  transition: transform 0.25s ease, opacity 0.25s ease;
 }
-
 .tp-main-image.fade-out-left {
-    transform: translateX(-40px) scale(0.95);
-    opacity: 0;
+  transform: translateX(-40px) scale(0.95);
+  opacity: 0;
 }
-
 .tp-main-image.fade-out-right {
-    transform: translateX(40px) scale(0.95);
-    opacity: 0;
+  transform: translateX(40px) scale(0.95);
+  opacity: 0;
 }
-
 .tp-main-image.fade-in {
-    transform: translateX(0) scale(1);
-    opacity: 1;
+  transform: translateX(0) scale(1);
+  opacity: 1;
 }
 
+/* Kategori link di modal */
 .tp-kategori {
-    cursor: pointer;
-    transition: color 0.2s ease, transform 0.15s ease;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.15s ease;
 }
 .tp-kategori:hover {
-    transform: translateX(3px);
+  transform: translateX(3px);
 }
 
+/* MAGNIFIER LENS */
+.magnifier-lens {
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  pointer-events: none;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  background-repeat: no-repeat;
+  display: none;
+  z-index: 20;
+}
+
+/* Biar dropdown tidak kepotong di mobile */
+select {
+  max-width: 100%;
+  word-break: break-word;
+  white-space: normal;
+}
+
+/* ============ FILTER CHIPS - VERSION 2 (SOFT NEUMORPH) ============ */
+
+/* MOBILE BUTTON */
+.filter-btn-mobile {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #374151;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+  box-shadow: 
+    0 1px 3px rgba(0,0,0,0.05),
+    inset 0 0 0 rgba(0,0,0,0);
+}
+
+/* DESKTOP BUTTON */
+.filter-btn-desktop {
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #374151;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  box-shadow:
+    0 1px 4px rgba(0,0,0,0.06),
+    inset 0 0 0 rgba(0,0,0,0);
+}
+
+/* HOVER (soft raise) */
+.filter-btn-mobile:hover,
+.filter-btn-desktop:hover {
+  transform: translateY(-1px);
+  box-shadow: 
+    0 4px 8px rgba(0,0,0,0.07);
+}
+
+/* ACTIVE */
+.filter-btn-mobile.active,
+.filter-btn-desktop.active {
+  background: #e6f7ee;
+  color: #047857;
+  border-color: #10b981;
+  box-shadow: 
+    0 0 0 2px rgba(16, 185, 129, 0.25),
+    0 6px 14px rgba(16, 185, 129, 0.15);
+}
+
+/* DARK MODE BASE */
+body.bg-gray-900 .filter-btn-mobile,
+body.bg-gray-900 .filter-btn-desktop {
+  background: #0f172a;
+  border-color: #334155;
+  color: #e5e7eb;
+  box-shadow: 
+    0 1px 3px rgba(0,0,0,0.6),
+    inset 0 0 0 rgba(0,0,0,0);
+}
+
+/* DARK MODE HOVER */
+body.bg-gray-900 .filter-btn-mobile:hover,
+body.bg-gray-900 .filter-btn-desktop:hover {
+  transform: translateY(-1px);
+  background: #1f2937;
+  box-shadow: 
+    0 5px 12px rgba(0,0,0,0.6);
+}
+
+/* DARK MODE ACTIVE */
+body.bg-gray-900 .filter-btn-mobile.active,
+body.bg-gray-900 .filter-btn-desktop.active {
+  background: #052e16;
+  color: #a7f3d0;
+  border-color: #10b981;
+  box-shadow: 
+    0 0 0 2px rgba(16,185,129,0.35),
+    0 6px 14px rgba(16, 185, 129, 0.2);
+}
+
+
+/* Mobile optimization */
+@media (max-width: 640px) {
+  select {
+    font-size: 14px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  option {
+    white-space: normal !important;
+    word-wrap: break-word;
+  }
+}
+
+/* Animasi geser halus carousel hero */
+#carouselTrack {
+  transition: transform 0.7s ease-in-out;
+}
+
+/* ================= LIGHT MODE FONT COLOR ================= */
+body:not(.bg-gray-900) {
+  color: #111827; /* text-gray-900 -> hitam soft */
+}
+
+/* Teks utama & heading */
+body:not(.bg-gray-900) h1,
+body:not(.bg-gray-900) h2,
+body:not(.bg-gray-900) h3,
+body:not(.bg-gray-900) h4,
+body:not(.bg-gray-900) h5,
+body:not(.bg-gray-900) h6 {
+  color: #111; /* Hitam lebih tegas untuk judul */
+}
+
+/* Paragraf / deskripsi */
+body:not(.bg-gray-900) p {
+  color: #1f2937; /* text-gray-800 */
+}
+
+/* Text kecil / metadata */
+body:not(.bg-gray-900) .text-sm,
+body:not(.bg-gray-900) .text-xs {
+  color: #374151; /* text-gray-700 */
+}
+
+/* Text tipis / secondary */
+body:not(.bg-gray-900) .opacity-70,
+body:not(.bg-gray-900) .text-gray-500,
+body:not(.bg-gray-900) .text-gray-400 {
+  color: #4b5563 !important; /* text-gray-600 */
+}
+
+/* Link */
+body:not(.bg-gray-900) a {
+  color: #000;
+}
+body:not(.bg-gray-900) a:hover {
+  color: #16a34a;
+}
+
+/* Button text */
+body:not(.bg-gray-900) button {
+  color: #111;
+}
+
+/* Input & placeholder */
+body:not(.bg-gray-900) input,
+body:not(.bg-gray-900) textarea,
+body:not(.bg-gray-900) select {
+  color: #111;
+}
+
+body:not(.bg-gray-900) input::placeholder,
+body:not(.bg-gray-900) textarea::placeholder {
+  color: #6b7280; /* netral, nggak terlalu samar */
+}
+
+
+/* === FOLLOW CARD STYLE 100% === */
+body:not(.bg-gray-900) .filter-container {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05) !important;
+  border-radius: 1rem !important;
+}
+
+body.bg-gray-900 .filter-container {
+  background: #1a1a1a !important;
+  border: 1px solid #2a2a2a !important;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4) !important;
+}
 
 </style>
 </head>
 
-<body x-data="winoApp()" :class="darkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-900'">
+<body x-data="winoApp()" 
+      :class="darkMode ? 'bg-gray-900 text-gray-100' : 'bg-[#ffffff] text-gray-900'">
+
 
 <!-- ========================================================= -->
 <!--                      HEADER                               -->
@@ -597,32 +740,123 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
 
 <!-- ===================== BERANDA ===================== -->
 <section x-show="page === 'beranda'" x-cloak class="space-y-12">
-  <!-- Hero Slider -->
-  <div class="relative w-full overflow-hidden rounded-2xl shadow-md">
-      <img 
-          src="{{ asset('images/banners.png') }}"
-          class="w-full object-cover max-h-[45vh] md:max-h-[55vh] lg:max-h-[60vh]"
-          alt="Hero Banner"
-      >
+<!-- Hero Slider -->
+<div class="relative w-full overflow-hidden rounded-2xl shadow-md">
+    <div id="carouselTrack" class="flex">
+        <!-- Setiap gambar lebar 100% & tidak mengecil -->
+        <img 
+            src="{{ asset('images/banners.png') }}"
+            class="w-full flex-shrink-0 object-cover max-h-[45vh] md:max-h-[55vh] lg:max-h-[60vh]"
+            alt="Banner 1"
+        >
+        <img 
+            src="{{ asset('images/banners2.png') }}"
+            class="w-full flex-shrink-0 object-cover max-h-[45vh] md:max-h-[55vh] lg:max-h-[60vh]"
+            alt="Banner 2"
+        >
+        <!-- Tambah lagi kalau perlu -->
+        <!--
+        <img 
+            src="{{ asset('images/banners3.png') }}"
+            class="w-full flex-shrink-0 object-cover max-h-[45vh] md:max-h-[55vh] lg:max-h-[60vh]"
+            alt="Banner 3"
+        >
+        -->
+    </div>
+</div>
+
+<div class="mb-6 w-full">
+<div class="filter-container 
+            rounded-2xl 
+            border border-gray-200 dark:border-gray-700
+            bg-white dark:bg-gray-900
+            shadow
+            px-4 py-3 sm:px-6 sm:py-4
+            flex flex-col gap-3 md:gap-4">
+
+    <!-- HEADER FILTER -->
+    <div class="flex items-center justify-between gap-3 text-xs sm:text-sm">
+      <div class="flex items-center gap-2">
+        <div class="flex h-7 w-7 items-center justify-center rounded-full bg-green-100 text-green-600 text-sm">
+          🧰
+        </div>
+        <div class="leading-tight">
+          <p class="font-semibold text-gray-800 dark:text-gray-100">Filter Produk</p>
+          <p class="text-[11px] text-gray-500 dark:text-gray-400">
+            Sesuaikan stok dan urutan harga
+          </p>
+        </div>
+      </div>
+
+      <!-- Ringkasan filter aktif -->
+      <div class="hidden sm:flex items-center gap-2 text-[11px] text-gray-500 dark:text-gray-400">
+        <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300">
+          <span class="text-[13px]">📦</span>
+          <span x-text="
+            filterStock === 'ready' ? 'Stok: Ready' :
+            filterStock === 'limit' ? 'Stok: Terbatas' :
+            filterStock === 'empty' ? 'Stok: Habis' : 'Stok: Semua'
+          "></span>
+        </span>
+        <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300">
+          <span class="text-[13px]">💰</span>
+          <span x-text="
+            filterPrice === 'low' ? 'Harga: Termurah' :
+            filterPrice === 'high' ? 'Harga: Termahal' : 'Harga: Semua'
+          "></span>
+        </span>
+      </div>
+    </div>
+
+    <!-- ISI FILTER -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+
+      <!-- ================= FILTER STOK ================= -->
+      <div>
+        <p class="block text-[11px] mb-2 font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 text-center md:text-left">
+          Filter Stok
+        </p>
+
+        <!-- 📱 MOBILE -->
+        <div class="flex justify-center gap-2 md:hidden">
+          <button @click="filterStock=''"     class="filter-btn-mobile" :class="filterStock===''      ? 'active' : ''">Semua</button>
+          <button @click="filterStock='ready'" class="filter-btn-mobile" :class="filterStock==='ready' ? 'active' : ''">Ready</button>
+          <button @click="filterStock='limit'" class="filter-btn-mobile" :class="filterStock==='limit' ? 'active' : ''">Terbatas</button>
+          <button @click="filterStock='empty'" class="filter-btn-mobile" :class="filterStock==='empty' ? 'active' : ''">Habis</button>
+        </div>
+
+        <!-- 💻 DESKTOP -->
+        <div class="hidden md:flex justify-center gap-1.5 mt-1 flex-wrap">
+          <button @click="filterStock=''"      class="filter-btn-desktop" :class="filterStock===''      ? 'active' : ''">Semua</button>
+          <button @click="filterStock='ready'" class="filter-btn-desktop" :class="filterStock==='ready' ? 'active' : ''">Ready</button>
+          <button @click="filterStock='limit'" class="filter-btn-desktop" :class="filterStock==='limit' ? 'active' : ''">Terbatas</button>
+          <button @click="filterStock='empty'" class="filter-btn-desktop" :class="filterStock==='empty' ? 'active' : ''">Habis</button>
+        </div>
+      </div>
+
+      <!-- ================= FILTER HARGA ================= -->
+      <div>
+        <p class="block text-[11px] mb-2 font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 text-center md:text-left">
+          Urutkan Harga
+        </p>
+
+        <!-- 📱 MOBILE -->
+        <div class="flex justify-center gap-2 md:hidden">
+          <button @click="filterPrice=''"    class="filter-btn-mobile" :class="filterPrice===''    ? 'active' : ''">Semua</button>
+          <button @click="filterPrice='low'" class="filter-btn-mobile" :class="filterPrice==='low' ? 'active' : ''">Termurah</button>
+          <button @click="filterPrice='high'"class="filter-btn-mobile" :class="filterPrice==='high'? 'active' : ''">Termahal</button>
+        </div>
+
+        <!-- 💻 DESKTOP -->
+        <div class="hidden md:flex justify-center gap-1.5 mt-1 flex-wrap">
+          <button @click="filterPrice=''"     class="filter-btn-desktop" :class="filterPrice===''     ? 'active' : ''">Semua</button>
+          <button @click="filterPrice='low'"  class="filter-btn-desktop" :class="filterPrice==='low'  ? 'active' : ''">Termurah</button>
+          <button @click="filterPrice='high'" class="filter-btn-desktop" :class="filterPrice==='high' ? 'active' : ''">Termahal</button>
+        </div>
+      </div>
+
+    </div>
   </div>
-
-  <div class="flex flex-wrap gap-3 mb-5 items-center">
-  <select 
-    x-model="filterStock"
-    class="px-3 py-2 rounded-lg border text-sm">
-    <option value="">Semua Stok</option>
-    <option value="ready">Ready</option>
-    <option value="limit">Terbatas</option>
-    <option value="empty">Habis</option>
-  </select>
-
-  <select 
-    x-model="filterPrice"
-    class="px-3 py-2 rounded-lg border text-sm">
-    <option value="">Urutkan Harga</option>
-    <option value="low">Termurah</option>
-    <option value="high">Termahal</option>
-  </select>
 </div>
 
 
@@ -1283,7 +1517,7 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
     <!-- ✅ LOGO MODAL -->
     <div 
         class="hidden md:flex absolute bottom-4 right-4 z-40 
-              bg-white/80 backdrop-blur px-3 py-1.5 
+              bg-[#ffffff] backdrop-blur px-3 py-1.5 
               rounded-lg shadow-md"
         :class="darkMode ? 'bg-black/40' : 'bg-white/80'"
     >
@@ -2305,6 +2539,48 @@ window.addEventListener("load", () => {
 
         setTimeout(() => preloader.remove(), 500);
     }, 300);
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const track  = document.getElementById("carouselTrack");
+    const slides = track.querySelectorAll("img");
+
+    if (slides.length === 0) return;
+
+    let index = 0;
+    const slideCount = slides.length;
+
+    // Clone slide pertama untuk efek loop mulus
+    const firstClone = slides[0].cloneNode(true);
+    track.appendChild(firstClone);
+
+    function goToSlide(i, animate = true) {
+        if (animate) {
+            track.style.transition = "transform 0.7s ease-in-out";
+        } else {
+            track.style.transition = "none";
+        }
+        track.style.transform = `translateX(-${i * 100}%)`;
+    }
+
+    goToSlide(index, false);
+
+    setInterval(() => {
+        index++;
+
+        // Geser ke slide berikutnya dengan animasi
+        goToSlide(index, true);
+
+        // Jika sudah sampai clone (paling akhir), lompat balik ke index 0 tanpa animasi
+        if (index === slideCount) {
+            setTimeout(() => {
+                index = 0;
+                goToSlide(index, false);
+            }, 700); // sama dengan durasi transition
+        }
+    }, 5000); // 5 detik
 });
 </script>
 
