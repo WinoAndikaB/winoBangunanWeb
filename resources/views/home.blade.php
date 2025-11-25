@@ -1047,7 +1047,29 @@ body.bg-gray-900 ::-webkit-scrollbar-thumb:hover {
       </div>
 
       <!-- JAM OPERASIONAL -->
-      <div class="mt-10 p-5 rounded-xl bg-green-600/10 border border-green-500/20">
+      <div 
+        x-data="{
+          isStoreOpen() {
+            const now = new Date();
+            const day = now.getDay(); // 0 = Minggu, 1 = Senin, ..., 6 = Sabtu
+            const hour = now.getHours();
+            const minute = now.getMinutes();
+            const currentTime = hour + (minute / 60);
+
+            // Jika hari Minggu, selalu tutup
+            if (day === 0) {
+              return false;
+            }
+
+            // Jam operasional: 08.00 - 17.00
+            const openTime = 8;
+            const closeTime = 17;
+
+            return currentTime >= openTime && currentTime < closeTime;
+          }
+        }"
+        class="mt-10 p-5 rounded-xl bg-green-600/10 border border-green-500/20"
+      >
         <h4 class="font-semibold text-lg mb-2">🕒 Jam Operasional</h4>
         <p>Senin - Sabtu: 08.00 - 17.00</p>
         <p>Minggu: Libur</p>
